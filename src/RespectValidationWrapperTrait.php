@@ -6,7 +6,7 @@ declare(strict_types=1);
  * Time: 15:37
  */
 
-namespace Respect\Validato\Wrapper;
+namespace Respect\Validaton\Wrapper;
 
 use Respect\Validation\Rules;
 use Respect\Validation\Rules\AbstractComposite;
@@ -203,10 +203,14 @@ trait RespectValidationWrapperTrait
         ];
         foreach ($rules as $key => $rule) {
             if (!is_string($key)) {
-                throw new RuntimeException(("Impossible d'initialisé la règle isAssocArray. $key n'est pas une clé valide"));
+                throw new RuntimeException(
+                    "Impossible d'initialisé la règle isAssocArray. $key n'est pas une clé valide"
+                );
             }
             if ($rule !== null && !is_a($rule, Validatable::class)) {
-                throw new RuntimeException(("Impossible d'initialisé la règle isAssocArray. la règle de $key n'est pas valide"));
+                throw new RuntimeException(
+                    "Impossible d'initialisé la règle isAssocArray. la règle de $key n'est pas valide"
+                );
             }
             $keyName = trim($key, '?');
             $mandatory = '?' !== $key[-1];

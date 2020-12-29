@@ -1,8 +1,6 @@
 <?php
 
-
-namespace Respect\Validato\Wrapper;
-
+namespace Respect\Validaton\Wrapper;
 
 use Respect\Validation\Rules\AbstractComposite;
 use Respect\Validation\Rules\AllOf;

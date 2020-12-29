@@ -22,7 +22,7 @@
   "type": "library",
   "autoload": {
     "psr-4": {
-      "Respect\\Validato\\Wrapper\\": "./src"
+      "Respect\\Validaton\\Wrapper\\": "./src"
     }
   }
 }

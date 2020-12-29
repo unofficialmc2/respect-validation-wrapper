@@ -24,5 +24,10 @@
     "psr-4": {
       "Respect\\Validaton\\Wrapper\\": "./src"
     }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Respect\\Validaton\\Wrapper\\Test\\": "./test"
+    }
   }
 }

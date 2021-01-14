@@ -7,6 +7,8 @@ use Respect\Validation\Rules\AllOf;
 use Respect\Validation\Rules\Alnum;
 use Respect\Validation\Rules\BoolType;
 use Respect\Validation\Rules\Date;
+use Respect\Validation\Rules\Equals;
+use Respect\Validation\Rules\In;
 use Respect\Validation\Rules\Not;
 use Respect\Validation\Rules\Numeric;
 use Respect\Validation\Rules\OneOf;
@@ -187,8 +189,31 @@ class RespectValidationWrapper
         return RespectValidationWrapperTrait::isTime();
     }
 
+    /**
+     * @param $rule
+     * @return \Respect\Validation\Rules\Not
+     */
     public static function not($rule): Not
     {
         return RespectValidationWrapperTrait::not($rule);
     }
+
+    /**
+     * @param $expected
+     * @return \Respect\Validation\Rules\Equals
+     */
+    protected static function is($expected): Equals
+    {
+        return RespectValidationWrapperTrait::is($expected);
+    }
+
+    /**
+     * @param array $array
+     * @return \Respect\Validation\Rules\In
+     */
+    protected static function isIn(array $array): In
+    {
+        return RespectValidationWrapperTrait::isIn($array);
+    }
+
 }

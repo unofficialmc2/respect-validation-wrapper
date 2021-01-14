@@ -8,13 +8,14 @@ declare(strict_types=1);
 
 namespace Respect\Validaton\Wrapper;
 
-use JetBrains\PhpStorm\Pure;
 use Respect\Validation\Rules;
 use Respect\Validation\Rules\AbstractComposite;
 use Respect\Validation\Rules\AllOf;
 use Respect\Validation\Rules\Alnum;
 use Respect\Validation\Rules\BoolType;
 use Respect\Validation\Rules\Date;
+use Respect\Validation\Rules\Equals;
+use Respect\Validation\Rules\In;
 use Respect\Validation\Rules\Not;
 use Respect\Validation\Rules\Numeric;
 use Respect\Validation\Rules\OneOf;
@@ -57,7 +58,7 @@ trait RespectValidationWrapperTrait
     {
         if ($max <= 0) {
             return new OneOf(
-                new Rules\Equals(''),
+                new Equals(''),
                 new AllOf(
                     new Rules\StringType(),
                     new Rules\Length(null, $maxMin)
@@ -81,7 +82,7 @@ trait RespectValidationWrapperTrait
     {
         if ($max <= 0) {
             return new OneOf(
-                new Rules\Equals(''),
+                new Equals(''),
                 self::isAllOf([
                     new Alnum(),
                     new Rules\Length(null, $maxMin)
@@ -188,8 +189,8 @@ trait RespectValidationWrapperTrait
     {
         return new OneOf(
             new Rules\NullType(),
-            new Rules\Equals(''),
-            new Rules\Equals(0),
+            new Equals(''),
+            new Equals(0),
             $rules
         );
     }
@@ -291,6 +292,24 @@ trait RespectValidationWrapperTrait
     protected static function not($rule): Not
     {
         return new Not($rule);
+    }
+
+    /**
+     * @param $expected
+     * @return \Respect\Validation\Rules\Equals
+     */
+    protected static function is($expected): Equals
+    {
+        return new Equals($expected);
+    }
+
+    /**
+     * @param array $array
+     * @return \Respect\Validation\Rules\In
+     */
+    protected static function isIn(array $array): In
+    {
+        return new In($array);
     }
 
 }

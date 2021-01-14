@@ -27,6 +27,8 @@ use RuntimeException;
  * @method  isAlphaNum($m = 0, $n = 0)
  * @method  isUid()
  * @method  not($r)
+ * @method  is($e)
+ * @method  isIn($a)
  * @package Respect\Validato\Wrapper\Test
  */
 class ValidatorBaseStub
@@ -337,5 +339,29 @@ class RespectValidationWrapperTraitTest extends TestCase
         self::assertFalse($v->validate(true));
         $v = (new ValidatorBaseStub)->not((new ValidatorBaseStub)->isId());
         self::assertTrue($v->validate('a'));
+    }
+
+    /**
+     * est de is
+     */
+    public function testIs()
+    {
+        $v = (new ValidatorBaseStub)->is(123);
+        self::assertTrue($v->validate(123));
+        self::assertFalse($v->validate('a'));
+        $v = (new ValidatorBaseStub)->is('a');
+        self::assertTrue($v->validate('a'));
+        self::assertFalse($v->validate(123));
+    }
+
+    /**
+     * est de isIn
+     */
+    public function testIsIn()
+    {
+        $v = (new ValidatorBaseStub)->isIn(['a', 'e', 'i']);
+        self::assertTrue($v->validate('a'));
+        self::assertFalse($v->validate('b'));
+        self::assertFalse($v->validate('u'));
     }
 }

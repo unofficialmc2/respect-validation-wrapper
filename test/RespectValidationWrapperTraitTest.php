@@ -12,6 +12,8 @@ use RuntimeException;
  * @method  isFalse()
  * @method  isTelNum()
  * @method  isDate()
+ * @method  isDateTime()
+ * @method  isTime()
  * @method  isNullable($r)
  * @method  isNullableOrEmpty($r)
  * @method  isArray($r = null)
@@ -172,6 +174,29 @@ class RespectValidationWrapperTraitTest extends TestCase
         $v = (new ValidatorBaseStub)->isDate();
         self::assertTrue($v->validate('2020-01-01'));
         self::assertFalse($v->validate('1er janvier 2020'));
+    }
+
+    /**
+     * test de IsDateTime
+     */
+    public function testIsDateTime(): void
+    {
+        $v = (new ValidatorBaseStub)->isDateTime();
+        self::assertTrue($v->validate('2020-01-01 12:36:26'));
+        self::assertFalse($v->validate('1er janvier 2020 6h3m10s'));
+        self::assertFalse($v->validate('1er janvier 2020 12:36:26'));
+        self::assertFalse($v->validate('2020-01-01 6h3m10s'));
+    }
+
+    /**
+     * test de IsTime
+     */
+    public function testIsTime(): void
+    {
+        $v = (new ValidatorBaseStub)->isTime();
+        self::assertTrue($v->validate('15:52:30'));
+        self::assertFalse($v->validate('15:52'));
+        self::assertFalse($v->validate('15h5210s'));
     }
 
     /**

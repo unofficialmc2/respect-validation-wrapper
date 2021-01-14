@@ -29,6 +29,8 @@ use RuntimeException;
  * @method  not($r)
  * @method  is($e)
  * @method  isIn($a)
+ * @method  isNull()
+ * @method  isNullOrEmpty()
  * @package Respect\Validato\Wrapper\Test
  */
 class ValidatorBaseStub
@@ -363,5 +365,31 @@ class RespectValidationWrapperTraitTest extends TestCase
         self::assertTrue($v->validate('a'));
         self::assertFalse($v->validate('b'));
         self::assertFalse($v->validate('u'));
+    }
+
+    /**
+     * test de isNull
+     */
+    public function testIsNull(): void
+    {
+        $v = (new ValidatorBaseStub)->isNull();
+        self::assertTrue($v->validate(null));
+        self::assertFalse($v->validate(0));
+        self::assertFalse($v->validate(''));
+        self::assertFalse($v->validate('123'));
+        self::assertFalse($v->validate(12345));
+    }
+
+    /**
+     * test de isNullOrEmpty
+     */
+    public function testIsNullOrEmpty(): void
+    {
+        $v = (new ValidatorBaseStub)->isNullOrEmpty();
+        self::assertTrue($v->validate(null));
+        self::assertTrue($v->validate(0));
+        self::assertTrue($v->validate(''));
+        self::assertFalse($v->validate('123'));
+        self::assertFalse($v->validate(12345));
     }
 }

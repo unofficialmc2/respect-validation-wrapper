@@ -169,4 +169,20 @@ class RespectValidationWrapper
     {
         RespectValidationWrapperTrait::isOneOf($rules);
     }
+
+    /**
+     * @return \Respect\Validation\Rules\Date
+     */
+    public static function isDateTime(): Date
+    {
+        RespectValidationWrapperTrait::isDateTime();
+    }
+
+    /**
+     * @return \Respect\Validation\Rules\Date
+     */
+    public static function isTime(): Date
+    {
+        RespectValidationWrapperTrait::isTime();
+    }
 }

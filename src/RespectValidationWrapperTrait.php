@@ -148,6 +148,22 @@ trait RespectValidationWrapperTrait
     }
 
     /**
+     * @return \Respect\Validation\Rules\Date
+     */
+    protected static function isDateTime(): Date
+    {
+        return new Date('Y-m-d H:i:s');
+    }
+
+    /**
+     * @return \Respect\Validation\Rules\Date
+     */
+    protected static function isTime(): Date
+    {
+        return new Date('H:i:s');
+    }
+
+    /**
      * rend une règle de validation nullable
      * @param $rules
      * @return \Respect\Validation\Rules\OneOf

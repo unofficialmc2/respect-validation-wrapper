@@ -17,6 +17,7 @@ use Respect\Validation\Rules\Date;
 use Respect\Validation\Rules\Equals;
 use Respect\Validation\Rules\In;
 use Respect\Validation\Rules\Not;
+use Respect\Validation\Rules\NullType;
 use Respect\Validation\Rules\Numeric;
 use Respect\Validation\Rules\OneOf;
 use Respect\Validation\Rules\Regex;
@@ -167,6 +168,26 @@ trait RespectValidationWrapperTrait
     }
 
     /**
+     * @return \Respect\Validation\Rules\NullType
+     */
+    protected static function isNull(): NullType
+    {
+        return new NullType();
+    }
+
+    /**
+     * @return \Respect\Validation\Rules\OneOf
+     */
+    protected static function isNullOrEmpty(): OneOf
+    {
+        return new OneOf(
+            new NullType(),
+            new Equals(''),
+            new Equals(0)
+        );
+    }
+
+    /**
      * rend une règle de validation nullable
      * @param $rules
      * @return \Respect\Validation\Rules\OneOf
@@ -174,7 +195,7 @@ trait RespectValidationWrapperTrait
     protected static function isNullable($rules): OneOf
     {
         return new OneOf(
-            new Rules\NullType(),
+            new NullType(),
             $rules
         );
     }
@@ -188,7 +209,7 @@ trait RespectValidationWrapperTrait
     protected static function isNullableOrEmpty($rules): OneOf
     {
         return new OneOf(
-            new Rules\NullType(),
+            new NullType(),
             new Equals(''),
             new Equals(0),
             $rules
@@ -311,5 +332,6 @@ trait RespectValidationWrapperTrait
     {
         return new In($array);
     }
+
 
 }

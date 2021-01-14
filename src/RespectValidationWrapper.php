@@ -10,6 +10,7 @@ use Respect\Validation\Rules\Date;
 use Respect\Validation\Rules\Equals;
 use Respect\Validation\Rules\In;
 use Respect\Validation\Rules\Not;
+use Respect\Validation\Rules\NullType;
 use Respect\Validation\Rules\Numeric;
 use Respect\Validation\Rules\OneOf;
 use Respect\Validation\Rules\Regex;
@@ -215,5 +216,22 @@ class RespectValidationWrapper
     {
         return RespectValidationWrapperTrait::isIn($array);
     }
+
+    /**
+     * @return \Respect\Validation\Rules\NullType
+     */
+    protected static function isNull(): NullType
+    {
+        return RespectValidationWrapper::isNull();
+    }
+
+    /**
+     * @return \Respect\Validation\Rules\OneOf
+     */
+    protected static function isNullOrEmpty(): OneOf
+    {
+        return RespectValidationWrapper::isNullOrEmpty();
+    }
+
 
 }

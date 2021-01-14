@@ -32,7 +32,7 @@ class RespectValidationWrapper
      */
     public static function isNumeric(): Numeric
     {
-        RespectValidationWrapperTrait::isNumeric();
+        return RespectValidationWrapperTrait::isNumeric();
     }
 
     /**
@@ -43,7 +43,7 @@ class RespectValidationWrapper
      */
     public static function isText(int $maxMin = 128, int $max = -1): AbstractComposite
     {
-        RespectValidationWrapperTrait::isText($maxMin, $max);
+        return RespectValidationWrapperTrait::isText($maxMin, $max);
     }
 
     /**
@@ -53,7 +53,7 @@ class RespectValidationWrapper
      */
     public static function isAlphaNum(int $maxMin = 128, int $max = -1)
     {
-        RespectValidationWrapperTrait::isAlphaNum($maxMin, $max);
+        return RespectValidationWrapperTrait::isAlphaNum($maxMin, $max);
     }
 
     /**
@@ -61,7 +61,7 @@ class RespectValidationWrapper
      */
     public static function isUid(): Regex
     {
-        RespectValidationWrapperTrait::isUid();
+        return RespectValidationWrapperTrait::isUid();
     }
 
     /**
@@ -69,7 +69,7 @@ class RespectValidationWrapper
      */
     public static function isBool(): BoolType
     {
-        RespectValidationWrapperTrait::isBool();
+        return RespectValidationWrapperTrait::isBool();
     }
 
     /**
@@ -77,7 +77,7 @@ class RespectValidationWrapper
      */
     public static function isTrue(): AllOf
     {
-        RespectValidationWrapperTrait::isTrue();
+        return RespectValidationWrapperTrait::isTrue();
     }
 
     /**
@@ -85,7 +85,7 @@ class RespectValidationWrapper
      */
     public static function isFalse(): AllOf
     {
-        RespectValidationWrapperTrait::isFalse();
+        return RespectValidationWrapperTrait::isFalse();
     }
 
     /**
@@ -93,7 +93,7 @@ class RespectValidationWrapper
      */
     public static function isTelNum(): Alnum
     {
-        RespectValidationWrapperTrait::isTelNum();
+        return RespectValidationWrapperTrait::isTelNum();
     }
 
     /**
@@ -101,7 +101,7 @@ class RespectValidationWrapper
      */
     public static function isDate(): Date
     {
-        RespectValidationWrapperTrait::isDate();
+        return RespectValidationWrapperTrait::isDate();
     }
 
     /**
@@ -110,7 +110,7 @@ class RespectValidationWrapper
      */
     public static function isNullable($rules): OneOf
     {
-        RespectValidationWrapperTrait::isNullable($rules);
+        return RespectValidationWrapperTrait::isNullable($rules);
     }
 
     /**
@@ -119,7 +119,7 @@ class RespectValidationWrapper
      */
     public static function isNullableOrEmpty($rules): OneOf
     {
-        RespectValidationWrapperTrait::isNullableOrEmpty($rules);
+        return RespectValidationWrapperTrait::isNullableOrEmpty($rules);
     }
 
     /**
@@ -128,7 +128,7 @@ class RespectValidationWrapper
      */
     public static function isArray($rules = null): AllOf
     {
-        RespectValidationWrapperTrait::isArray($rules);
+        return RespectValidationWrapperTrait::isArray($rules);
     }
 
     /**
@@ -138,7 +138,7 @@ class RespectValidationWrapper
      */
     public static function isAssocArray(array $rules): AllOf
     {
-        RespectValidationWrapperTrait::isAssocArray($rules);
+        return RespectValidationWrapperTrait::isAssocArray($rules);
     }
 
     /**
@@ -149,7 +149,7 @@ class RespectValidationWrapper
      */
     public static function isObject(array $rules, string $className = ""): AllOf
     {
-        RespectValidationWrapperTrait::isObject($rules, $className);
+        return RespectValidationWrapperTrait::isObject($rules, $className);
     }
 
     /**
@@ -158,7 +158,7 @@ class RespectValidationWrapper
      */
     public static function isAllOf(array $rules): AllOf
     {
-        RespectValidationWrapperTrait::isAllOf($rules);
+        return RespectValidationWrapperTrait::isAllOf($rules);
     }
 
     /**
@@ -167,7 +167,7 @@ class RespectValidationWrapper
      */
     public static function isOneOf(array $rules): OneOf
     {
-        RespectValidationWrapperTrait::isOneOf($rules);
+        return RespectValidationWrapperTrait::isOneOf($rules);
     }
 
     /**
@@ -175,7 +175,7 @@ class RespectValidationWrapper
      */
     public static function isDateTime(): Date
     {
-        RespectValidationWrapperTrait::isDateTime();
+        return RespectValidationWrapperTrait::isDateTime();
     }
 
     /**
@@ -183,6 +183,6 @@ class RespectValidationWrapper
      */
     public static function isTime(): Date
     {
-        RespectValidationWrapperTrait::isTime();
+        return RespectValidationWrapperTrait::isTime();
     }
 }

@@ -7,6 +7,7 @@ use Respect\Validation\Rules\AllOf;
 use Respect\Validation\Rules\Alnum;
 use Respect\Validation\Rules\BoolType;
 use Respect\Validation\Rules\Date;
+use Respect\Validation\Rules\Not;
 use Respect\Validation\Rules\Numeric;
 use Respect\Validation\Rules\OneOf;
 use Respect\Validation\Rules\Regex;
@@ -184,5 +185,10 @@ class RespectValidationWrapper
     public static function isTime(): Date
     {
         return RespectValidationWrapperTrait::isTime();
+    }
+
+    public static function not($rule): Not
+    {
+        return RespectValidationWrapperTrait::not($rule);
     }
 }

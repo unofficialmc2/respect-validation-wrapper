@@ -8,12 +8,14 @@ declare(strict_types=1);
 
 namespace Respect\Validaton\Wrapper;
 
+use JetBrains\PhpStorm\Pure;
 use Respect\Validation\Rules;
 use Respect\Validation\Rules\AbstractComposite;
 use Respect\Validation\Rules\AllOf;
 use Respect\Validation\Rules\Alnum;
 use Respect\Validation\Rules\BoolType;
 use Respect\Validation\Rules\Date;
+use Respect\Validation\Rules\Not;
 use Respect\Validation\Rules\Numeric;
 use Respect\Validation\Rules\OneOf;
 use Respect\Validation\Rules\Regex;
@@ -282,8 +284,13 @@ trait RespectValidationWrapperTrait
         return new OneOf($rules);
     }
 
-
-    private static function isNotNull()
+    /**
+     * @param $rule
+     * @return \Respect\Validation\Rules\Not
+     */
+    protected static function not($rule): Not
     {
+        return new Not($rule);
     }
+
 }

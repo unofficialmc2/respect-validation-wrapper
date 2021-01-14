@@ -26,6 +26,7 @@ use RuntimeException;
  * @method  isText($m = 0, $n = 0)
  * @method  isAlphaNum($m = 0, $n = 0)
  * @method  isUid()
+ * @method  not($r)
  * @package Respect\Validato\Wrapper\Test
  */
 class ValidatorBaseStub
@@ -324,5 +325,17 @@ class RespectValidationWrapperTraitTest extends TestCase
         self::assertTrue($v->validate(false));
         self::assertTrue($v->validate(true));
         self::assertFalse($v->validate('aze'));
+    }
+
+    /**
+     * test de not
+     */
+    public function testNot(): void
+    {
+        $v = (new ValidatorBaseStub)->not((new ValidatorBaseStub)->isTrue());
+        self::assertTrue($v->validate(false));
+        self::assertFalse($v->validate(true));
+        $v = (new ValidatorBaseStub)->not((new ValidatorBaseStub)->isId());
+        self::assertTrue($v->validate('a'));
     }
 }

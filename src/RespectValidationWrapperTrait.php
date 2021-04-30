@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Respect\Validaton\Wrapper;
 
 use Respect\Validation\Rules;
+use Respect\Validation\Rules\AbstractRule;
 use Respect\Validation\Rules\AbstractComposite;
 use Respect\Validation\Rules\AllOf;
 use Respect\Validation\Rules\Alnum;
@@ -189,10 +190,10 @@ trait RespectValidationWrapperTrait
 
     /**
      * rend une règle de validation nullable
-     * @param $rules
+     * @param AbstractRule $rules
      * @return \Respect\Validation\Rules\OneOf
      */
-    protected static function isNullable($rules): OneOf
+    protected static function isNullable(AbstractRule $rules): OneOf
     {
         return new OneOf(
             new NullType(),
@@ -203,10 +204,10 @@ trait RespectValidationWrapperTrait
     /**
      * rend une règle de validation nullable
      * et accepte une chaine vide
-     * @param $rules
+     * @param AbstractRule $rules
      * @return \Respect\Validation\Rules\OneOf
      */
-    protected static function isNullableOrEmpty($rules): OneOf
+    protected static function isNullableOrEmpty(AbstractRule $rules): OneOf
     {
         return new OneOf(
             new NullType(),
@@ -217,10 +218,10 @@ trait RespectValidationWrapperTrait
     }
 
     /**
-     * @param null $rules
+     * @param \Respect\Validation\Rules\AbstractRule|null $rules
      * @return \Respect\Validation\Rules\AllOf
      */
-    protected static function isArray($rules = null): AllOf
+    protected static function isArray(?AbstractRule $rules = null): AllOf
     {
         $finalRules = [
             new Rules\ArrayType(),
@@ -275,10 +276,14 @@ trait RespectValidationWrapperTrait
         }
         foreach ($rules as $key => $rule) {
             if (!is_string($key)) {
-                throw new RuntimeException(("Impossible d'initialisé la règle isObject. $key n'est pas une clé valide"));
+                throw new RuntimeException(
+                    ("Impossible d'initialisé la règle isObject. $key n'est pas une clé valide")
+                );
             }
             if ($rule !== null && !is_a($rule, Validatable::class)) {
-                throw new RuntimeException(("Impossible d'initialisé la règle isObject. la règle de $key n'est pas valide"));
+                throw new RuntimeException(
+                    ("Impossible d'initialisé la règle isObject. la règle de $key n'est pas valide")
+                );
             }
             $keyName = trim($key, '?');
             $mandatory = '?' !== $key[-1];
@@ -289,7 +294,7 @@ trait RespectValidationWrapperTrait
     }
 
     /**
-     * @param array $rules
+     * @param array<\Respect\Validation\Rules\AbstractRule> $rules
      * @return \Respect\Validation\Rules\AllOf
      */
     protected static function isAllOf(array $rules): AllOf
@@ -298,7 +303,7 @@ trait RespectValidationWrapperTrait
     }
 
     /**
-     * @param array $rules
+     * @param array<\Respect\Validation\Rules\AbstractRule> $rules
      * @return \Respect\Validation\Rules\OneOf
      */
     protected static function isOneOf(array $rules): OneOf
@@ -307,16 +312,16 @@ trait RespectValidationWrapperTrait
     }
 
     /**
-     * @param $rule
+     * @param \Respect\Validation\Rules\AbstractRule $rule
      * @return \Respect\Validation\Rules\Not
      */
-    protected static function not($rule): Not
+    protected static function not(AbstractRule $rule): Not
     {
         return new Not($rule);
     }
 
     /**
-     * @param $expected
+     * @param mixed $expected
      * @return \Respect\Validation\Rules\Equals
      */
     protected static function is($expected): Equals
@@ -325,7 +330,7 @@ trait RespectValidationWrapperTrait
     }
 
     /**
-     * @param array $array
+     * @param array<\Respect\Validation\Rules\AbstractRule> $array
      * @return \Respect\Validation\Rules\In
      */
     protected static function isIn(array $array): In

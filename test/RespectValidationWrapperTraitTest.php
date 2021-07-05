@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Respect\Validaton\Wrapper\Test;
 
@@ -31,6 +32,7 @@ use RuntimeException;
  * @method  isIn($a)
  * @method  isNull()
  * @method  isNullOrEmpty()
+ * @method  isMail($l = 128)
  * @package Respect\Validato\Wrapper\Test
  */
 class ValidatorBaseStub
@@ -391,5 +393,19 @@ class RespectValidationWrapperTraitTest extends TestCase
         self::assertTrue($v->validate(''));
         self::assertFalse($v->validate('123'));
         self::assertFalse($v->validate(12345));
+    }
+
+
+    /**
+     * test de isMail
+     * @throws \Respect\Validation\Exceptions\ComponentException
+     */
+    public function testIsMail(): void
+    {
+        $v = (new ValidatorBaseStub)->isMail();
+        self::assertTrue($v->validate('adresse@mail.net'));
+        self::assertFalse($v->validate('mail.net'));
+        self::assertTrue($v->validate('adresse+test@mail.net'));
+        self::assertTrue($v->validate('adresse.test@mail.net'));
     }
 }

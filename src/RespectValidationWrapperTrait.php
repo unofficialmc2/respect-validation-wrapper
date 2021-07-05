@@ -9,8 +9,8 @@ declare(strict_types=1);
 namespace Respect\Validaton\Wrapper;
 
 use Respect\Validation\Rules;
-use Respect\Validation\Rules\AbstractRule;
 use Respect\Validation\Rules\AbstractComposite;
+use Respect\Validation\Rules\AbstractRule;
 use Respect\Validation\Rules\AllOf;
 use Respect\Validation\Rules\Alnum;
 use Respect\Validation\Rules\BoolType;
@@ -338,5 +338,18 @@ trait RespectValidationWrapperTrait
         return new In($array);
     }
 
+    /**
+     * valide une adresse e-mail
+     * @param int $length
+     * @return \Respect\Validation\Rules\AbstractComposite
+     * @throws \Respect\Validation\Exceptions\ComponentException
+     */
+    protected static function isMail(int $length = 128): AbstractComposite
+    {
+        return new AllOf(
+            new Rules\Length(null, $length),
+            new Rules\Email()
+        );
+    }
 
 }

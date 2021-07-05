@@ -233,5 +233,10 @@ class RespectValidationWrapper
         return RespectValidationWrapper::isNullOrEmpty();
     }
 
+    protected static function isMail(int $length = 128): AllOf
+    {
+        return RespectValidationWrapper::isMail($length);
+    }
+
 
 }

@@ -43,6 +43,15 @@ trait RespectValidationWrapperTrait
     }
 
     /**
+     * @param array<\Respect\Validation\Rules\AbstractRule> $rules
+     * @return \Respect\Validation\Rules\AllOf
+     */
+    protected static function isAllOf(array $rules): AllOf
+    {
+        return new AllOf($rules);
+    }
+
+    /**
      * @return \Respect\Validation\Rules\Numeric
      */
     protected static function isNumeric(): Numeric
@@ -295,15 +304,6 @@ trait RespectValidationWrapperTrait
 
     /**
      * @param array<\Respect\Validation\Rules\AbstractRule> $rules
-     * @return \Respect\Validation\Rules\AllOf
-     */
-    protected static function isAllOf(array $rules): AllOf
-    {
-        return new AllOf($rules);
-    }
-
-    /**
-     * @param array<\Respect\Validation\Rules\AbstractRule> $rules
      * @return \Respect\Validation\Rules\OneOf
      */
     protected static function isOneOf(array $rules): OneOf
@@ -352,4 +352,12 @@ trait RespectValidationWrapperTrait
         );
     }
 
+    /**
+     * valide une URL
+     * @return \Respect\Validation\Validatable
+     */
+    protected static function isUrl(): Validatable
+    {
+        return new Rules\Url();
+    }
 }

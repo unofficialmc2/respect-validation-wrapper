@@ -54,6 +54,7 @@ class RespectValidationWrapper
     /**
      * @param int $maxMin
      * @param int $max
+     * @return \Respect\Validation\Rules\AllOf|\Respect\Validation\Rules\OneOf
      * @throws \Respect\Validation\Exceptions\ComponentException
      */
     public static function isAlphaNum(int $maxMin = 128, int $max = -1)
@@ -250,5 +251,4 @@ class RespectValidationWrapper
     {
         return RespectValidationWrapper::isUrl();
     }
-
 }

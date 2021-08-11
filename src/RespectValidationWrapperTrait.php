@@ -351,4 +351,13 @@ trait RespectValidationWrapperTrait
             new Rules\Email()
         );
     }
+
+    /**
+     * valide une URL
+     * @return \Respect\Validation\Validatable
+     */
+    protected static function isUrl(): Validatable
+    {
+        return new Rules\Url();
+    }
 }

@@ -14,6 +14,7 @@ use Respect\Validation\Rules\NullType;
 use Respect\Validation\Rules\Numeric;
 use Respect\Validation\Rules\OneOf;
 use Respect\Validation\Rules\Regex;
+use Respect\Validation\Validatable;
 
 /**
  * Class RespectValidationWrapper
@@ -233,10 +234,21 @@ class RespectValidationWrapper
         return RespectValidationWrapper::isNullOrEmpty();
     }
 
+    /**
+     * @param int $length
+     * @return \Respect\Validation\Rules\AllOf
+     */
     protected static function isMail(int $length = 128): AllOf
     {
         return RespectValidationWrapper::isMail($length);
     }
 
+    /**
+     * @return \Respect\Validation\Validatable
+     */
+    protected static function isUrl(): Validatable
+    {
+        return RespectValidationWrapper::isUrl();
+    }
 
 }

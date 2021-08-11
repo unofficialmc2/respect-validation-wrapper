@@ -33,6 +33,7 @@ use RuntimeException;
  * @method  isNull()
  * @method  isNullOrEmpty()
  * @method  isMail($l = 128)
+ * @method  isUrl()
  * @package Respect\Validato\Wrapper\Test
  */
 class ValidatorBaseStub
@@ -407,5 +408,15 @@ class RespectValidationWrapperTraitTest extends TestCase
         self::assertFalse($v->validate('mail.net'));
         self::assertTrue($v->validate('adresse+test@mail.net'));
         self::assertTrue($v->validate('adresse.test@mail.net'));
+    }
+
+    /**
+     * test de isUrl
+     */
+    public function testIsUrl(): void
+    {
+        $v = (new ValidatorBaseStub)->isUrl();
+        self::assertTrue($v->validate('http://www.exemple.net'));
+        self::assertFals($v->validate('http:exemple.net'));
     }
 }

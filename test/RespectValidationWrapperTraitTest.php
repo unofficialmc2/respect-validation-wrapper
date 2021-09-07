@@ -274,6 +274,25 @@ class RespectValidationWrapperTraitTest extends TestCase
     }
 
     /**
+     * test de IsAssocArray
+     * @throws \Respect\Validation\Exceptions\ComponentException
+     */
+    public function testIsAssocArrayWithoutKey(): void
+    {
+        $v = (new ValidatorBaseStub)->isAssocArray([
+            'id' => (new ValidatorBaseStub)->isId(),
+            '-ref' => null
+        ]);
+        self::assertTrue($v->validate([
+            'id' => 1
+        ]));
+        self::assertFalse($v->validate([
+            'id' => 1,
+            'ref' => 'AZERTY123456'
+        ]));
+    }
+
+    /**
      * test de IsObject
      * @throws \Respect\Validation\Exceptions\ComponentException
      */
@@ -299,6 +318,25 @@ class RespectValidationWrapperTraitTest extends TestCase
         self::assertFalse($v->validate([
             'id' => 1,
             'libelle' => 'aze'
+        ]));
+    }
+
+    /**
+     * test de IsObject
+     * @throws \Respect\Validation\Exceptions\ComponentException
+     */
+    public function testIsObjectWithout(): void
+    {
+        $v = (new ValidatorBaseStub)->isObject([
+            'id' => (new ValidatorBaseStub)->isId(),
+            '-ref' => null
+        ]);
+        self::assertTrue($v->validate((object)[
+            'id' => 2
+        ]));
+        self::assertFalse($v->validate((object)[
+            'id' => 2,
+            'ref' => 'AZEERTY123456'
         ]));
     }
 
@@ -417,6 +455,6 @@ class RespectValidationWrapperTraitTest extends TestCase
     {
         $v = (new ValidatorBaseStub)->isUrl();
         self::assertTrue($v->validate('http://www.exemple.net'));
-        self::assertFals($v->validate('http:exemple.net'));
+        self::assertFalse($v->validate('http:exemple.net'));
     }
 }

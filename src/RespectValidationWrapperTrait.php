@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Respect\Validaton\Wrapper;
 
+use LogicException;
 use Respect\Validation\Rules;
 use Respect\Validation\Rules\AbstractComposite;
 use Respect\Validation\Rules\AbstractRule;
@@ -62,10 +63,10 @@ trait RespectValidationWrapperTrait
     /**
      * @param int $maxMin
      * @param int $max
-     * @return \Respect\Validation\Rules\AbstractRule
+     * @return \Respect\Validation\Validatable
      * @throws \Respect\Validation\Exceptions\ComponentException
      */
-    protected static function isText(int $maxMin = 128, int $max = -1): AbstractComposite
+    protected static function isText(int $maxMin = 128, int $max = -1): Validatable
     {
         if ($max <= 0) {
             return new OneOf(
@@ -262,9 +263,15 @@ trait RespectValidationWrapperTrait
                     "Impossible d'initialisé la règle isAssocArray. la règle de $key n'est pas valide"
                 );
             }
-            $keyName = trim($key, '?');
+            $keyName = trim($key, '?-');
             $mandatory = '?' !== $key[-1];
-            $finalRules[] = new Rules\Key($keyName, $rule, $mandatory);
+            $not = '-' === $key[0];
+            if (!$mandatory && $not) {
+                throw new LogicException("Les potions de clé ne sont pas compatible");
+            }
+            $finalRules[] = !$not
+                ? new Rules\Key($keyName, $rule, $mandatory)
+                : new Not(new Rules\Key($keyName));
         }
         return self::isAllOf($finalRules);
     }
@@ -294,28 +301,34 @@ trait RespectValidationWrapperTrait
                     ("Impossible d'initialisé la règle isObject. la règle de $key n'est pas valide")
                 );
             }
-            $keyName = trim($key, '?');
+            $keyName = trim($key, '?-');
             $mandatory = '?' !== $key[-1];
-
-            $finalRules[] = new Rules\Attribute($keyName, $rule, $mandatory);
+            $not = '-' === $key[0];
+            if (!$mandatory && $not) {
+                throw new LogicException("Les potions d'attributs ne sont pas compatible");
+            }
+            $finalRules[] = !$not
+                ? new Rules\Attribute($keyName, $rule, $mandatory)
+                : new Not(new Rules\Attribute($keyName));
         }
         return self::isAllOf($finalRules);
     }
 
     /**
-     * @param array<\Respect\Validation\Rules\AbstractRule> $rules
-     * @return \Respect\Validation\Rules\OneOf
+     * @param array<\Respect\Validation\Validatable> $rules
+     * @return \Respect\Validation\Validatable
      */
-    protected static function isOneOf(array $rules): OneOf
+    protected static function isOneOf(array $rules): Validatable
     {
         return new OneOf($rules);
     }
 
     /**
-     * @param \Respect\Validation\Rules\AbstractRule $rule
-     * @return \Respect\Validation\Rules\Not
+     * inverse la validation
+     * @param \Respect\Validation\Validatable $rule
+     * @return \Respect\Validation\Validatable
      */
-    protected static function not(AbstractRule $rule): Not
+    protected static function not(Validatable $rule): Validatable
     {
         return new Not($rule);
     }

@@ -10,8 +10,6 @@ namespace Respect\Validaton\Wrapper;
 
 use LogicException;
 use Respect\Validation\Rules;
-use Respect\Validation\Rules\AbstractComposite;
-use Respect\Validation\Rules\AbstractRule;
 use Respect\Validation\Rules\AllOf;
 use Respect\Validation\Rules\Alnum;
 use Respect\Validation\Rules\BoolType;
@@ -33,29 +31,20 @@ use RuntimeException;
 trait RespectValidationWrapperTrait
 {
     /**
-     * @return \Respect\Validation\Rules\AllOf
+     * @return \Respect\Validation\Validatable
      */
-    protected static function isId(): AllOf
+    protected static function isId(): Validatable
     {
-        return self::isAllOf([
+        return new AllOf(
             new Rules\IntVal(),
             new Rules\Positive()
-        ]);
+        );
     }
 
     /**
-     * @param array<\Respect\Validation\Rules\AbstractRule> $rules
-     * @return \Respect\Validation\Rules\AllOf
+     * @return \Respect\Validation\Validatable
      */
-    protected static function isAllOf(array $rules): AllOf
-    {
-        return new AllOf($rules);
-    }
-
-    /**
-     * @return \Respect\Validation\Rules\Numeric
-     */
-    protected static function isNumeric(): Numeric
+    protected static function isNumeric(): Validatable
     {
         return new Numeric();
     }
@@ -77,119 +66,119 @@ trait RespectValidationWrapperTrait
                 )
             );
         }
-        return self::isAllOf([
+        return new AllOf(
             new Rules\StringType(),
             new Rules\NotEmpty(),
             new Rules\Length($maxMin, $max)
-        ]);
+        );
     }
 
     /**
      * @param int $maxMin
      * @param int $max
-     * @return \Respect\Validation\Rules\AllOf|\Respect\Validation\Rules\OneOf
+     * @return \Respect\Validation\Validatable
      * @throws \Respect\Validation\Exceptions\ComponentException
      */
-    protected static function isAlphaNum(int $maxMin = 128, int $max = -1)
+    protected static function isAlphaNum(int $maxMin = 128, int $max = -1): Validatable
     {
         if ($max <= 0) {
             return new OneOf(
                 new Equals(''),
-                self::isAllOf([
+                new AllOf(
                     new Alnum(),
                     new Rules\Length(null, $maxMin)
-                ])
+                )
             );
         }
-        return self::isAllOf([
+        return new AllOf(
             new Alnum(),
             new Rules\NotEmpty(),
             new Rules\Length($maxMin, $max)
-        ]);
+        );
     }
 
     /**
-     * @return \Respect\Validation\Rules\Regex
+     * @return \Respect\Validation\Validatable
      */
-    protected static function isUid(): Regex
+    protected static function isUid(): Validatable
     {
         return new Regex('/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}/');
     }
 
     /**
-     * @return \Respect\Validation\Rules\BoolType
+     * @return \Respect\Validation\Validatable
      */
-    protected static function isBool(): BoolType
+    protected static function isBool(): Validatable
     {
         return new BoolType();
     }
 
     /**
-     * @return \Respect\Validation\Rules\AllOf
+     * @return \Respect\Validation\Validatable
      */
-    protected static function isTrue(): AllOf
+    protected static function isTrue(): Validatable
     {
-        return self::isAllOf([
+        return new AllOf(
             new BoolType(),
             new Rules\TrueVal()
-        ]);
+        );
     }
 
     /**
-     * @return \Respect\Validation\Rules\AllOf
+     * @return \Respect\Validation\Validatable
      */
-    protected static function isFalse(): AllOf
+    protected static function isFalse(): Validatable
     {
-        return self::isAllOf([
+        return new AllOf(
             new BoolType(),
             new Rules\FalseVal()
-        ]);
+        );
     }
 
     /**
-     * @return \Respect\Validation\Rules\Alnum
+     * @return \Respect\Validation\Validatable
      */
-    protected static function isTelNum(): Alnum
+    protected static function isTelNum(): Validatable
     {
         return new Alnum('+.-/ ');
     }
 
     /**
-     * @return \Respect\Validation\Rules\Date
+     * @return \Respect\Validation\Validatable
      */
-    protected static function isDate(): Date
+    protected static function isDate(): Validatable
     {
         return new Date('Y-m-d');
     }
 
     /**
-     * @return \Respect\Validation\Rules\Date
+     * @return \Respect\Validation\Validatable
      */
-    protected static function isDateTime(): Date
+    protected static function isDateTime(): Validatable
     {
         return new Date('Y-m-d H:i:s');
     }
 
     /**
-     * @return \Respect\Validation\Rules\Date
+     * @return \Respect\Validation\Validatable
      */
-    protected static function isTime(): Date
+    protected static function isTime(): Validatable
     {
         return new Date('H:i:s');
     }
 
     /**
-     * @return \Respect\Validation\Rules\NullType
+     * @return \Respect\Validation\Validatable
      */
-    protected static function isNull(): NullType
+    protected static function isNull(): Validatable
     {
         return new NullType();
     }
 
     /**
-     * @return \Respect\Validation\Rules\OneOf
+     * @return \Respect\Validation\Validatable
      */
-    protected static function isNullOrEmpty(): OneOf
+    protected static function isNullOrEmpty(): Validatable
     {
         return new OneOf(
             new NullType(),
@@ -200,10 +189,10 @@ trait RespectValidationWrapperTrait
 
     /**
      * rend une règle de validation nullable
-     * @param AbstractRule $rules
-     * @return \Respect\Validation\Rules\OneOf
+     * @param \Respect\Validation\Validatable $rules
+     * @return \Respect\Validation\Validatable
      */
-    protected static function isNullable(AbstractRule $rules): OneOf
+    protected static function isNullable(Validatable $rules): Validatable
     {
         return new OneOf(
             new NullType(),
@@ -214,10 +203,10 @@ trait RespectValidationWrapperTrait
     /**
      * rend une règle de validation nullable
      * et accepte une chaine vide
-     * @param AbstractRule $rules
-     * @return \Respect\Validation\Rules\OneOf
+     * @param \Respect\Validation\Validatable $rules
+     * @return \Respect\Validation\Validatable
      */
-    protected static function isNullableOrEmpty(AbstractRule $rules): OneOf
+    protected static function isNullableOrEmpty(Validatable $rules): Validatable
     {
         return new OneOf(
             new NullType(),
@@ -228,10 +217,10 @@ trait RespectValidationWrapperTrait
     }
 
     /**
-     * @param \Respect\Validation\Rules\AbstractRule|null $rules
-     * @return \Respect\Validation\Rules\AllOf
+     * @param \Respect\Validation\Validatable|null $rules
+     * @return \Respect\Validation\Validatable
      */
-    protected static function isArray(?AbstractRule $rules = null): AllOf
+    protected static function isArray(?Validatable $rules = null): Validatable
     {
         $finalRules = [
             new Rules\ArrayType(),
@@ -239,15 +228,15 @@ trait RespectValidationWrapperTrait
         if ($rules !== null) {
             $finalRules [] = new Rules\Each($rules);
         }
-        return self::isAllOf($finalRules);
+        return new AllOf(...$finalRules);
     }
 
     /**
      * @param array<string,\Respect\Validation\Validatable|null> $rules
-     * @return \Respect\Validation\Rules\AllOf
+     * @return \Respect\Validation\Validatable
      * @throws \Respect\Validation\Exceptions\ComponentException
      */
-    protected static function isAssocArray(array $rules): AllOf
+    protected static function isAssocArray(array $rules): Validatable
     {
         $finalRules = [
             new Rules\ArrayType()
@@ -273,16 +262,16 @@ trait RespectValidationWrapperTrait
                 ? new Rules\Key($keyName, $rule, $mandatory)
                 : new Not(new Rules\Key($keyName));
         }
-        return self::isAllOf($finalRules);
+        return new AllOf(...$finalRules);
     }
 
     /**
      * @param array<string,\Respect\Validation\Validatable|null> $rules
      * @param string $className
-     * @return \Respect\Validation\Rules\AllOf
+     * @return \Respect\Validation\Validatable
      * @throws \Respect\Validation\Exceptions\ComponentException
      */
-    protected static function isObject(array $rules, string $className = ""): AllOf
+    protected static function isObject(array $rules, string $className = ""): Validatable
     {
         $finalRules = [
             new Rules\ObjectType()
@@ -311,7 +300,16 @@ trait RespectValidationWrapperTrait
                 ? new Rules\Attribute($keyName, $rule, $mandatory)
                 : new Not(new Rules\Attribute($keyName));
         }
-        return self::isAllOf($finalRules);
+        return new AllOf(...$finalRules);
+    }
+
+    /**
+     * @param array<\Respect\Validation\Validatable> $rules
+     * @return \Respect\Validation\Validatable
+     */
+    protected static function isAllOf(array $rules): Validatable
+    {
+        return new AllOf($rules);
     }
 
     /**
@@ -335,18 +333,18 @@ trait RespectValidationWrapperTrait
 
     /**
      * @param mixed $expected
-     * @return \Respect\Validation\Rules\Equals
+     * @return \Respect\Validation\Validatable
      */
-    protected static function is($expected): Equals
+    protected static function is($expected): Validatable
     {
         return new Equals($expected);
     }
 
     /**
-     * @param array<\Respect\Validation\Rules\AbstractRule> $array
-     * @return \Respect\Validation\Rules\In
+     * @param array<\Respect\Validation\Validatable> $array
+     * @return \Respect\Validation\Validatable
      */
-    protected static function isIn(array $array): In
+    protected static function isIn(array $array): Validatable
     {
         return new In($array);
     }
@@ -354,10 +352,10 @@ trait RespectValidationWrapperTrait
     /**
      * valide une adresse e-mail
      * @param int $length
-     * @return \Respect\Validation\Rules\AbstractComposite
+     * @return \Respect\Validation\Validatable
      * @throws \Respect\Validation\Exceptions\ComponentException
      */
-    protected static function isMail(int $length = 128): AbstractComposite
+    protected static function isMail(int $length = 128): Validatable
     {
         return new AllOf(
             new Rules\Length(null, $length),

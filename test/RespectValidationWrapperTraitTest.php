@@ -387,7 +387,7 @@ class RespectValidationWrapperTraitTest extends TestCase
     /**
      * est de is
      */
-    public function testIs()
+    public function testIs(): void
     {
         $v = (new ValidatorBaseStub)->is(123);
         self::assertTrue($v->validate(123));
@@ -400,7 +400,7 @@ class RespectValidationWrapperTraitTest extends TestCase
     /**
      * est de isIn
      */
-    public function testIsIn()
+    public function testIsIn(): void
     {
         $v = (new ValidatorBaseStub)->isIn(['a', 'e', 'i']);
         self::assertTrue($v->validate('a'));

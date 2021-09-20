@@ -1,5 +1,7 @@
 parameters:
-	level: 6
-	paths:
-		- src
-		- test
+  level: 6
+  paths:
+    - src
+    - test
+  ignoreErrors:
+    - '#Call to protected static method [a-zA-Z]+\(\) of class Respect\\Validaton\\Wrapper\\RespectValidationWrapperTrait\.#'

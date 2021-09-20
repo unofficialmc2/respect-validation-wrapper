@@ -1,19 +1,8 @@
 <?php
+declare(strict_types=1);
 
 namespace Respect\Validaton\Wrapper;
 
-use Respect\Validation\Rules\AbstractComposite;
-use Respect\Validation\Rules\AllOf;
-use Respect\Validation\Rules\Alnum;
-use Respect\Validation\Rules\BoolType;
-use Respect\Validation\Rules\Date;
-use Respect\Validation\Rules\Equals;
-use Respect\Validation\Rules\In;
-use Respect\Validation\Rules\Not;
-use Respect\Validation\Rules\NullType;
-use Respect\Validation\Rules\Numeric;
-use Respect\Validation\Rules\OneOf;
-use Respect\Validation\Rules\Regex;
 use Respect\Validation\Validatable;
 
 /**
@@ -25,17 +14,17 @@ class RespectValidationWrapper
     use RespectValidationWrapperTrait;
 
     /**
-     * @return \Respect\Validation\Rules\AllOf
+     * @return \Respect\Validation\Validatable
      */
-    public static function isId(): AllOf
+    public static function isId(): Validatable
     {
         return RespectValidationWrapperTrait::isId();
     }
 
     /**
-     * @return \Respect\Validation\Rules\Numeric
+     * @return \Respect\Validation\Validatable
      */
-    public static function isNumeric(): Numeric
+    public static function isNumeric(): Validatable
     {
         return RespectValidationWrapperTrait::isNumeric();
     }
@@ -43,10 +32,10 @@ class RespectValidationWrapper
     /**
      * @param int $maxMin
      * @param int $max
-     * @return \Respect\Validation\Rules\AbstractComposite
+     * @return \Respect\Validation\Validatable
      * @throws \Respect\Validation\Exceptions\ComponentException
      */
-    public static function isText(int $maxMin = 128, int $max = -1): AbstractComposite
+    public static function isText(int $maxMin = 128, int $max = -1): Validatable
     {
         return RespectValidationWrapperTrait::isText($maxMin, $max);
     }
@@ -54,192 +43,192 @@ class RespectValidationWrapper
     /**
      * @param int $maxMin
      * @param int $max
-     * @return \Respect\Validation\Rules\AllOf|\Respect\Validation\Rules\OneOf
+     * @return \Respect\Validation\Validatable
      * @throws \Respect\Validation\Exceptions\ComponentException
      */
-    public static function isAlphaNum(int $maxMin = 128, int $max = -1)
+    public static function isAlphaNum(int $maxMin = 128, int $max = -1): Validatable
     {
         return RespectValidationWrapperTrait::isAlphaNum($maxMin, $max);
     }
 
     /**
-     * @return \Respect\Validation\Rules\Regex
+     * @return \Respect\Validation\Validatable
      */
-    public static function isUid(): Regex
+    public static function isUid(): Validatable
     {
         return RespectValidationWrapperTrait::isUid();
     }
 
     /**
-     * @return \Respect\Validation\Rules\BoolType
+     * @return \Respect\Validation\Validatable
      */
-    public static function isBool(): BoolType
+    public static function isBool(): Validatable
     {
         return RespectValidationWrapperTrait::isBool();
     }
 
     /**
-     * @return \Respect\Validation\Rules\AllOf
+     * @return \Respect\Validation\Validatable
      */
-    public static function isTrue(): AllOf
+    public static function isTrue(): Validatable
     {
         return RespectValidationWrapperTrait::isTrue();
     }
 
     /**
-     * @return \Respect\Validation\Rules\AllOf
+     * @return \Respect\Validation\Validatable
      */
-    public static function isFalse(): AllOf
+    public static function isFalse(): Validatable
     {
         return RespectValidationWrapperTrait::isFalse();
     }
 
     /**
-     * @return \Respect\Validation\Rules\Alnum
+     * @return \Respect\Validation\Validatable
      */
-    public static function isTelNum(): Alnum
+    public static function isTelNum(): Validatable
     {
         return RespectValidationWrapperTrait::isTelNum();
     }
 
     /**
-     * @return \Respect\Validation\Rules\Date
+     * @return \Respect\Validation\Validatable
      */
-    public static function isDate(): Date
+    public static function isDate(): Validatable
     {
         return RespectValidationWrapperTrait::isDate();
     }
 
     /**
-     * @param $rules
-     * @return \Respect\Validation\Rules\OneOf
+     * @param \Respect\Validation\Validatable $rules
+     * @return \Respect\Validation\Validatable
      */
-    public static function isNullable($rules): OneOf
+    public static function isNullable(Validatable $rules): Validatable
     {
         return RespectValidationWrapperTrait::isNullable($rules);
     }
 
     /**
-     * @param $rules
-     * @return \Respect\Validation\Rules\OneOf
+     * @param \Respect\Validation\Validatable $rules
+     * @return \Respect\Validation\Validatable
      */
-    public static function isNullableOrEmpty($rules): OneOf
+    public static function isNullableOrEmpty(Validatable $rules): Validatable
     {
         return RespectValidationWrapperTrait::isNullableOrEmpty($rules);
     }
 
     /**
      * @param null $rules
-     * @return \Respect\Validation\Rules\AllOf
+     * @return \Respect\Validation\Validatable
      */
-    public static function isArray($rules = null): AllOf
+    public static function isArray($rules = null): Validatable
     {
         return RespectValidationWrapperTrait::isArray($rules);
     }
 
     /**
-     * @param array $rules
-     * @return \Respect\Validation\Rules\AllOf
+     * @param array<\Respect\Validation\Validatable> $rules
+     * @return \Respect\Validation\Validatable
      * @throws \Respect\Validation\Exceptions\ComponentException
      */
-    public static function isAssocArray(array $rules): AllOf
+    public static function isAssocArray(array $rules): Validatable
     {
         return RespectValidationWrapperTrait::isAssocArray($rules);
     }
 
     /**
-     * @param array $rules
+     * @param array<\Respect\Validation\Validatable> $rules
      * @param string $className
-     * @return \Respect\Validation\Rules\AllOf
+     * @return \Respect\Validation\Validatable
      * @throws \Respect\Validation\Exceptions\ComponentException
      */
-    public static function isObject(array $rules, string $className = ""): AllOf
+    public static function isObject(array $rules, string $className = ""): Validatable
     {
         return RespectValidationWrapperTrait::isObject($rules, $className);
     }
 
     /**
-     * @param array $rules
-     * @return \Respect\Validation\Rules\AllOf
+     * @param array<\Respect\Validation\Validatable> $rules
+     * @return \Respect\Validation\Validatable
      */
-    public static function isAllOf(array $rules): AllOf
+    public static function isAllOf(array $rules): Validatable
     {
         return RespectValidationWrapperTrait::isAllOf($rules);
     }
 
     /**
-     * @param array $rules
-     * @return \Respect\Validation\Rules\OneOf
+     * @param array<\Respect\Validation\Validatable> $rules
+     * @return \Respect\Validation\Validatable
      */
-    public static function isOneOf(array $rules): OneOf
+    public static function isOneOf(array $rules): Validatable
     {
         return RespectValidationWrapperTrait::isOneOf($rules);
     }
 
     /**
-     * @return \Respect\Validation\Rules\Date
+     * @return \Respect\Validation\Validatable
      */
-    public static function isDateTime(): Date
+    public static function isDateTime(): Validatable
     {
         return RespectValidationWrapperTrait::isDateTime();
     }
 
     /**
-     * @return \Respect\Validation\Rules\Date
+     * @return \Respect\Validation\Validatable
      */
-    public static function isTime(): Date
+    public static function isTime(): Validatable
     {
         return RespectValidationWrapperTrait::isTime();
     }
 
     /**
-     * @param $rule
-     * @return \Respect\Validation\Rules\Not
+     * @param \Respect\Validation\Validatable $rule
+     * @return \Respect\Validation\Validatable
      */
-    public static function not($rule): Not
+    public static function not(Validatable $rule): Validatable
     {
         return RespectValidationWrapperTrait::not($rule);
     }
 
     /**
-     * @param $expected
-     * @return \Respect\Validation\Rules\Equals
+     * @param mixed $expected
+     * @return \Respect\Validation\Validatable
      */
-    protected static function is($expected): Equals
+    protected static function is($expected): Validatable
     {
         return RespectValidationWrapperTrait::is($expected);
     }
 
     /**
-     * @param array $array
-     * @return \Respect\Validation\Rules\In
+     * @param mixed[] $array
+     * @return \Respect\Validation\Validatable
      */
-    protected static function isIn(array $array): In
+    protected static function isIn(array $array): Validatable
     {
         return RespectValidationWrapperTrait::isIn($array);
     }
 
     /**
-     * @return \Respect\Validation\Rules\NullType
+     * @return \Respect\Validation\Validatable
      */
-    protected static function isNull(): NullType
+    protected static function isNull(): Validatable
     {
         return RespectValidationWrapper::isNull();
     }
 
     /**
-     * @return \Respect\Validation\Rules\OneOf
+     * @return \Respect\Validation\Validatable
      */
-    protected static function isNullOrEmpty(): OneOf
+    protected static function isNullOrEmpty(): Validatable
     {
         return RespectValidationWrapper::isNullOrEmpty();
     }
 
     /**
      * @param int $length
-     * @return \Respect\Validation\Rules\AllOf
+     * @return \Respect\Validation\Validatable
      */
-    protected static function isMail(int $length = 128): AllOf
+    protected static function isMail(int $length = 128): Validatable
     {
         return RespectValidationWrapper::isMail($length);
     }
@@ -250,5 +239,13 @@ class RespectValidationWrapper
     protected static function isUrl(): Validatable
     {
         return RespectValidationWrapper::isUrl();
+    }
+
+    /**
+     * @return \Respect\Validation\Validatable
+     */
+    protected static function isUriData(): Validatable
+    {
+        return RespectValidationWrapper::isUriData();
     }
 }

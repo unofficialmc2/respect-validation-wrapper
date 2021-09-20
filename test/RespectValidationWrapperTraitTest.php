@@ -34,6 +34,7 @@ use RuntimeException;
  * @method  isNullOrEmpty()
  * @method  isMail($l = 128)
  * @method  isUrl()
+ * @method  isUriData()
  * @package Respect\Validato\Wrapper\Test
  */
 class ValidatorBaseStub
@@ -387,7 +388,7 @@ class RespectValidationWrapperTraitTest extends TestCase
     /**
      * est de is
      */
-    public function testIs()
+    public function testIs(): void
     {
         $v = (new ValidatorBaseStub)->is(123);
         self::assertTrue($v->validate(123));
@@ -400,7 +401,7 @@ class RespectValidationWrapperTraitTest extends TestCase
     /**
      * est de isIn
      */
-    public function testIsIn()
+    public function testIsIn(): void
     {
         $v = (new ValidatorBaseStub)->isIn(['a', 'e', 'i']);
         self::assertTrue($v->validate('a'));
@@ -455,6 +456,17 @@ class RespectValidationWrapperTraitTest extends TestCase
     {
         $v = (new ValidatorBaseStub)->isUrl();
         self::assertTrue($v->validate('http://www.exemple.net'));
+        self::assertFalse($v->validate('http:exemple.net'));
+    }
+
+    /**
+     * test la validation dun Uri Data
+     */
+    public function testUriData(): void
+    {
+        $data = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAADCAMAAACd425HAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAXVBMVEVChfRBhfV3cLjvPzD2mhL4vQhUiOg5lqlqiU34OzJChfQ9h/qOZ53tQjH2khXtuhdjjsw7jtCjaUjvQDRChfQ/hvefYYvsQDP3mRLyuxFKh+s/ieegakzuQTT///84b11YAAAAHnRSTlNnUigmHiQgREknYFF3a3ZtcoaUdyQzHjAmLmByLy6csil2AAAAAWJLR0QecgogKwAAAAd0SU1FB+UJFA4DLqVT8S4AAAApSURBVAjXY2BgZGJmYWVj5+Bk4OLm4eXjFxAUEmYQERUTl5CUkpaRBQASmwG0/WmHKAAAACt0RVh0Q29tbWVudABSZXNpemVkIG9uIGh0dHBzOi8vZXpnaWYuY29tL3Jlc2l6ZUJpjS0AAAAldEVYdGRhdGU6Y3JlYXRlADIwMjEtMDktMjBUMTQ6MDM6MzgrMDA6MDAaKnZPAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDIxLTA5LTIwVDE0OjAzOjM4KzAwOjAwa3fO8wAAABJ0RVh0U29mdHdhcmUAZXpnaWYuY29toMOzWAAAAABJRU5ErkJggg==";
+        $v = (new ValidatorBaseStub)->isUriData();
+        self::assertTrue($v->validate($data));
         self::assertFalse($v->validate('http:exemple.net'));
     }
 }

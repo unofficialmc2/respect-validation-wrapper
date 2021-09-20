@@ -371,4 +371,14 @@ trait RespectValidationWrapperTrait
     {
         return new Rules\Url();
     }
+
+    /**
+     * valide un text au format UriData
+     * @return \Respect\Validation\Validatable
+     */
+    protected function isUriData(): Validatable
+    {
+        $reg = "/^data:([\w\-\.]+\/[\w\-\.+]+)(;charset=[\w\-\.]+)?(;\w+)?,.*$/";
+        return new Rules\Regex($reg);
+    }
 }

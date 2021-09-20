@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Respect\Validaton\Wrapper;
 
@@ -238,5 +239,13 @@ class RespectValidationWrapper
     protected static function isUrl(): Validatable
     {
         return RespectValidationWrapper::isUrl();
+    }
+
+    /**
+     * @return \Respect\Validation\Validatable
+     */
+    protected static function isUriData(): Validatable
+    {
+        return RespectValidationWrapper::isUriData();
     }
 }

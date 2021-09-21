@@ -12,15 +12,20 @@ use LogicException;
 use Respect\Validation\Rules;
 use Respect\Validation\Rules\AllOf;
 use Respect\Validation\Rules\Alnum;
+use Respect\Validation\Rules\AnyOf;
 use Respect\Validation\Rules\BoolType;
 use Respect\Validation\Rules\Date;
+use Respect\Validation\Rules\DateTime;
+use Respect\Validation\Rules\Digit;
 use Respect\Validation\Rules\Equals;
+use Respect\Validation\Rules\Identical;
 use Respect\Validation\Rules\In;
 use Respect\Validation\Rules\Not;
 use Respect\Validation\Rules\NullType;
-use Respect\Validation\Rules\Numeric;
+use Respect\Validation\Rules\NumericVal;
 use Respect\Validation\Rules\OneOf;
 use Respect\Validation\Rules\Regex;
+use Respect\Validation\Rules\Time;
 use Respect\Validation\Validatable;
 use RuntimeException;
 
@@ -46,7 +51,7 @@ trait RespectValidationWrapperTrait
      */
     protected static function isNumeric(): Validatable
     {
-        return new Numeric();
+        return new NumericVal();
     }
 
     /**
@@ -140,7 +145,7 @@ trait RespectValidationWrapperTrait
      */
     protected static function isTelNum(): Validatable
     {
-        return new Alnum('+.-/ ');
+        return new Digit('+.-/ ');
     }
 
     /**
@@ -156,7 +161,7 @@ trait RespectValidationWrapperTrait
      */
     protected static function isDateTime(): Validatable
     {
-        return new Date('Y-m-d H:i:s');
+        return new DateTime('Y-m-d H:i:s');
     }
 
     /**
@@ -164,7 +169,7 @@ trait RespectValidationWrapperTrait
      */
     protected static function isTime(): Validatable
     {
-        return new Date('H:i:s');
+        return new Time('H:i:s');
     }
 
     /**
@@ -180,10 +185,10 @@ trait RespectValidationWrapperTrait
      */
     protected static function isNullOrEmpty(): Validatable
     {
-        return new OneOf(
+        return new AnyOf(
             new NullType(),
-            new Equals(''),
-            new Equals(0)
+            new Identical(''),
+            new Identical(0)
         );
     }
 
@@ -208,10 +213,10 @@ trait RespectValidationWrapperTrait
      */
     protected static function isNullableOrEmpty(Validatable $rules): Validatable
     {
-        return new OneOf(
+        return new AnyOf(
             new NullType(),
-            new Equals(''),
-            new Equals(0),
+            new Identical(''),
+            new Identical(0),
             $rules
         );
     }
@@ -269,7 +274,6 @@ trait RespectValidationWrapperTrait
      * @param array<string,\Respect\Validation\Validatable|null> $rules
      * @param string $className
      * @return \Respect\Validation\Validatable
-     * @throws \Respect\Validation\Exceptions\ComponentException
      */
     protected static function isObject(array $rules, string $className = ""): Validatable
     {
@@ -309,7 +313,7 @@ trait RespectValidationWrapperTrait
      */
     protected static function isAllOf(array $rules): Validatable
     {
-        return new AllOf($rules);
+        return new AllOf(...$rules);
     }
 
     /**
@@ -318,7 +322,7 @@ trait RespectValidationWrapperTrait
      */
     protected static function isOneOf(array $rules): Validatable
     {
-        return new OneOf($rules);
+        return new OneOf(...$rules);
     }
 
     /**

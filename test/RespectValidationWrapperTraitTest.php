@@ -35,6 +35,7 @@ use RuntimeException;
  * @method  isMail($l = 128)
  * @method  isUrl()
  * @method  isUriData()
+ * @method  isSlug($m = 0, $n = 0)
  * @package Respect\Validato\Wrapper\Test
  */
 class ValidatorBaseStub
@@ -468,5 +469,29 @@ class RespectValidationWrapperTraitTest extends TestCase
         $v = (new ValidatorBaseStub)->isUriData();
         self::assertTrue($v->validate($data));
         self::assertFalse($v->validate('http:exemple.net'));
+    }
+
+    /**
+     * test de la validation d'un slug
+     */
+    public function testSlug(): void
+    {
+        $v = (new ValidatorBaseStub)->isSlug();
+        self::assertTrue($v->validate('az09'));
+        self::assertTrue($v->validate('az09.az09'));
+        self::assertTrue($v->validate('az09.az09.az09'));
+        self::assertTrue($v->validate('az09-az09'));
+        self::assertTrue($v->validate('az09-az09-az09'));
+        self::assertTrue($v->validate('az09_az09'));
+        self::assertTrue($v->validate('az09_az09_az09'));
+        self::assertTrue($v->validate('az09.az09-az09_az09'));
+        self::assertFalse($v->validate('http:exemple.net'));
+        $v = (new ValidatorBaseStub)->isSlug(6);
+        self::assertTrue($v->validate('az09'), "bonne longueur");
+        self::assertFalse($v->validate('az09az09'), "trop long");
+        $v = (new ValidatorBaseStub)->isSlug(6, 10);
+        self::assertFalse($v->validate('az09'), "trop court");
+        self::assertTrue($v->validate('az09az09'), "bonne longueur");
+        self::assertFalse($v->validate('az09az09az09'), "trop long");
     }
 }

@@ -9,18 +9,25 @@ declare(strict_types=1);
 namespace Respect\Validaton\Wrapper;
 
 use LogicException;
+use Respect\Validation\Exceptions\ComponentException;
 use Respect\Validation\Rules;
 use Respect\Validation\Rules\AllOf;
 use Respect\Validation\Rules\Alnum;
+use Respect\Validation\Rules\AnyOf;
 use Respect\Validation\Rules\BoolType;
 use Respect\Validation\Rules\Date;
+use Respect\Validation\Rules\DateTime;
+use Respect\Validation\Rules\Digit;
 use Respect\Validation\Rules\Equals;
+use Respect\Validation\Rules\Identical;
 use Respect\Validation\Rules\In;
+use Respect\Validation\Rules\Length;
 use Respect\Validation\Rules\Not;
 use Respect\Validation\Rules\NullType;
-use Respect\Validation\Rules\Numeric;
+use Respect\Validation\Rules\NumericVal;
 use Respect\Validation\Rules\OneOf;
 use Respect\Validation\Rules\Regex;
+use Respect\Validation\Rules\Time;
 use Respect\Validation\Validatable;
 use RuntimeException;
 
@@ -46,55 +53,61 @@ trait RespectValidationWrapperTrait
      */
     protected static function isNumeric(): Validatable
     {
-        return new Numeric();
+        return new NumericVal();
     }
 
     /**
      * @param int $maxMin
      * @param int $max
      * @return \Respect\Validation\Validatable
-     * @throws \Respect\Validation\Exceptions\ComponentException
      */
     protected static function isText(int $maxMin = 128, int $max = -1): Validatable
     {
-        if ($max <= 0) {
-            return new OneOf(
-                new Equals(''),
-                new AllOf(
-                    new Rules\StringType(),
-                    new Rules\Length(null, $maxMin)
-                )
+        try {
+            if ($max <= 0) {
+                return new OneOf(
+                    new Equals(''),
+                    new AllOf(
+                        new Rules\StringType(),
+                        new Length(null, $maxMin)
+                    )
+                );
+            }
+            return new AllOf(
+                new Rules\StringType(),
+                new Rules\NotEmpty(),
+                new Length($maxMin, $max)
             );
+        } catch (ComponentException $e) {
+            throw new RuntimeException("impossible d'initialiser " . static::class . " un problème dans " . __METHOD__);
         }
-        return new AllOf(
-            new Rules\StringType(),
-            new Rules\NotEmpty(),
-            new Rules\Length($maxMin, $max)
-        );
     }
 
     /**
      * @param int $maxMin
      * @param int $max
      * @return \Respect\Validation\Validatable
-     * @throws \Respect\Validation\Exceptions\ComponentException
      */
     protected static function isAlphaNum(int $maxMin = 128, int $max = -1): Validatable
     {
-        if ($max <= 0) {
-            return new OneOf(
-                new Equals(''),
-                new AllOf(
-                    new Alnum(),
-                    new Rules\Length(null, $maxMin)
-                )
+        try {
+            if ($max <= 0) {
+                return new OneOf(
+                    new Equals(''),
+                    new AllOf(
+                        new Alnum(),
+                        new Length(null, $maxMin)
+                    )
+                );
+            }
+            return new AllOf(
+                new Alnum(),
+                new Rules\NotEmpty(),
+                new Length($maxMin, $max)
             );
+        } catch (ComponentException $e) {
+            throw new RuntimeException("impossible d'initialiser " . static::class . " un problème dans " . __METHOD__);
         }
-        return new AllOf(
-            new Alnum(),
-            new Rules\NotEmpty(),
-            new Rules\Length($maxMin, $max)
-        );
     }
 
     /**
@@ -103,6 +116,35 @@ trait RespectValidationWrapperTrait
     protected static function isUid(): Validatable
     {
         return new Regex('/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}/');
+    }
+
+    /**
+     * valide un slug
+     * @param int $maxMin
+     * @param int $max
+     * @return \Respect\Validation\Validatable
+     */
+    protected static function isSlug(int $maxMin = 128, int $max = -1): Validatable
+    {
+        try {
+            $slug = new Regex('/^[a-z0-9]+(?:[._-][a-z0-9]+)*$/i');
+            if ($max <= 0) {
+                return new OneOf(
+                    new Equals(''),
+                    new AllOf(
+                        $slug,
+                        new Length(null, $maxMin)
+                    )
+                );
+            }
+            return new AllOf(
+                $slug,
+                new Rules\NotEmpty(),
+                new Length($maxMin, $max)
+            );
+        } catch (ComponentException $e) {
+            throw new RuntimeException("impossible d'initialiser " . static::class . " un problème dans " . __METHOD__);
+        }
     }
 
     /**
@@ -140,7 +182,7 @@ trait RespectValidationWrapperTrait
      */
     protected static function isTelNum(): Validatable
     {
-        return new Alnum('+.-/ ');
+        return new Digit('+.-/ ');
     }
 
     /**
@@ -156,7 +198,7 @@ trait RespectValidationWrapperTrait
      */
     protected static function isDateTime(): Validatable
     {
-        return new Date('Y-m-d H:i:s');
+        return new DateTime('Y-m-d H:i:s');
     }
 
     /**
@@ -164,7 +206,7 @@ trait RespectValidationWrapperTrait
      */
     protected static function isTime(): Validatable
     {
-        return new Date('H:i:s');
+        return new Time('H:i:s');
     }
 
     /**
@@ -180,10 +222,10 @@ trait RespectValidationWrapperTrait
      */
     protected static function isNullOrEmpty(): Validatable
     {
-        return new OneOf(
+        return new AnyOf(
             new NullType(),
-            new Equals(''),
-            new Equals(0)
+            new Identical(''),
+            new Identical(0)
         );
     }
 
@@ -208,10 +250,10 @@ trait RespectValidationWrapperTrait
      */
     protected static function isNullableOrEmpty(Validatable $rules): Validatable
     {
-        return new OneOf(
+        return new AnyOf(
             new NullType(),
-            new Equals(''),
-            new Equals(0),
+            new Identical(''),
+            new Identical(0),
             $rules
         );
     }
@@ -234,42 +276,44 @@ trait RespectValidationWrapperTrait
     /**
      * @param array<string,\Respect\Validation\Validatable|null> $rules
      * @return \Respect\Validation\Validatable
-     * @throws \Respect\Validation\Exceptions\ComponentException
      */
     protected static function isAssocArray(array $rules): Validatable
     {
-        $finalRules = [
-            new Rules\ArrayType()
-        ];
-        foreach ($rules as $key => $rule) {
-            if (!is_string($key)) {
-                throw new RuntimeException(
-                    "Impossible d'initialisé la règle isAssocArray. $key n'est pas une clé valide"
-                );
+        try {
+            $finalRules = [
+                new Rules\ArrayType()
+            ];
+            foreach ($rules as $key => $rule) {
+                if (!is_string($key)) {
+                    throw new RuntimeException(
+                        "Impossible d'initialisé la règle isAssocArray. $key n'est pas une clé valide"
+                    );
+                }
+                if ($rule !== null && !is_a($rule, Validatable::class)) {
+                    throw new RuntimeException(
+                        "Impossible d'initialisé la règle isAssocArray. la règle de $key n'est pas valide"
+                    );
+                }
+                $keyName = trim($key, '?-');
+                $mandatory = '?' !== $key[-1];
+                $not = '-' === $key[0];
+                if (!$mandatory && $not) {
+                    throw new LogicException("Les potions de clé ne sont pas compatible");
+                }
+                $finalRules[] = !$not
+                    ? new Rules\Key($keyName, $rule, $mandatory)
+                    : new Not(new Rules\Key($keyName));
             }
-            if ($rule !== null && !is_a($rule, Validatable::class)) {
-                throw new RuntimeException(
-                    "Impossible d'initialisé la règle isAssocArray. la règle de $key n'est pas valide"
-                );
-            }
-            $keyName = trim($key, '?-');
-            $mandatory = '?' !== $key[-1];
-            $not = '-' === $key[0];
-            if (!$mandatory && $not) {
-                throw new LogicException("Les potions de clé ne sont pas compatible");
-            }
-            $finalRules[] = !$not
-                ? new Rules\Key($keyName, $rule, $mandatory)
-                : new Not(new Rules\Key($keyName));
+            return new AllOf(...$finalRules);
+        } catch (ComponentException $e) {
+            throw new RuntimeException("impossible d'initialiser " . static::class . " un problème dans " . __METHOD__);
         }
-        return new AllOf(...$finalRules);
     }
 
     /**
      * @param array<string,\Respect\Validation\Validatable|null> $rules
      * @param string $className
      * @return \Respect\Validation\Validatable
-     * @throws \Respect\Validation\Exceptions\ComponentException
      */
     protected static function isObject(array $rules, string $className = ""): Validatable
     {
@@ -309,7 +353,7 @@ trait RespectValidationWrapperTrait
      */
     protected static function isAllOf(array $rules): Validatable
     {
-        return new AllOf($rules);
+        return new AllOf(...$rules);
     }
 
     /**
@@ -318,7 +362,7 @@ trait RespectValidationWrapperTrait
      */
     protected static function isOneOf(array $rules): Validatable
     {
-        return new OneOf($rules);
+        return new OneOf(...$rules);
     }
 
     /**
@@ -353,14 +397,17 @@ trait RespectValidationWrapperTrait
      * valide une adresse e-mail
      * @param int $length
      * @return \Respect\Validation\Validatable
-     * @throws \Respect\Validation\Exceptions\ComponentException
      */
     protected static function isMail(int $length = 128): Validatable
     {
-        return new AllOf(
-            new Rules\Length(null, $length),
-            new Rules\Email()
-        );
+        try {
+            return new AllOf(
+                new Length(null, $length),
+                new Rules\Email()
+            );
+        } catch (ComponentException $e) {
+            throw new RuntimeException("impossible d'initialiser " . static::class . " un problème dans " . __METHOD__);
+        }
     }
 
     /**

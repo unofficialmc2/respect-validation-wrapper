@@ -119,6 +119,35 @@ trait RespectValidationWrapperTrait
     }
 
     /**
+     * valide un slug
+     * @param int $maxMin
+     * @param int $max
+     * @return \Respect\Validation\Validatable
+     */
+    protected static function isSlug(int $maxMin = 128, int $max = -1): Validatable
+    {
+        try {
+            $slug = new Regex('/^[a-z0-9]+(?:[._-][a-z0-9]+)*$/i');
+            if ($max <= 0) {
+                return new OneOf(
+                    new Equals(''),
+                    new AllOf(
+                        $slug,
+                        new Length(null, $maxMin)
+                    )
+                );
+            }
+            return new AllOf(
+                $slug,
+                new Rules\NotEmpty(),
+                new Length($maxMin, $max)
+            );
+        } catch (ComponentException $e) {
+            throw new RuntimeException("impossible d'initialiser " . static::class . " un problème dans " . __METHOD__);
+        }
+    }
+
+    /**
      * @return \Respect\Validation\Validatable
      */
     protected static function isBool(): Validatable

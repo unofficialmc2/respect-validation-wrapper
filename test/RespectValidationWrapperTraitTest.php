@@ -8,34 +8,35 @@ use RuntimeException;
 
 /**
  * Class ValidatorBaseStub
- * @method  isBool()
- * @method  isTrue()
- * @method  isFalse()
- * @method  isTelNum()
- * @method  isDate()
- * @method  isDateTime()
- * @method  isTime()
- * @method  isNullable($r)
- * @method  isNullableOrEmpty($r)
- * @method  isArray($r = null)
- * @method  isAssocArray($r)
- * @method  isObject($r, $c = null)
- * @method  isAllOf($r)
- * @method  isOneOf($r)
- * @method  isId()
- * @method  isNumeric()
- * @method  isText($m = 0, $n = 0)
- * @method  isAlphaNum($m = 0, $n = 0)
- * @method  isUid()
- * @method  not($r)
- * @method  is($e)
- * @method  isIn($a)
- * @method  isNull()
- * @method  isNullOrEmpty()
- * @method  isMail($l = 128)
- * @method  isUrl()
- * @method  isUriData()
- * @method  isSlug($m = 0, $n = 0)
+ * @method \Respect\Validation\Validatable isBool()
+ * @method \Respect\Validation\Validatable isTrue()
+ * @method \Respect\Validation\Validatable isFalse()
+ * @method \Respect\Validation\Validatable isTelNum()
+ * @method \Respect\Validation\Validatable isDate()
+ * @method \Respect\Validation\Validatable isDateTime()
+ * @method \Respect\Validation\Validatable isTime()
+ * @method \Respect\Validation\Validatable isNullable($r)
+ * @method \Respect\Validation\Validatable isNullableOrEmpty($r)
+ * @method \Respect\Validation\Validatable isArray($r = null)
+ * @method \Respect\Validation\Validatable isAssocArray($r)
+ * @method \Respect\Validation\Validatable isObject($r, $c = null)
+ * @method \Respect\Validation\Validatable isAllOf($r)
+ * @method \Respect\Validation\Validatable isOneOf($r)
+ * @method \Respect\Validation\Validatable isId()
+ * @method \Respect\Validation\Validatable isNumeric()
+ * @method \Respect\Validation\Validatable isText($m = 0, $n = 0)
+ * @method \Respect\Validation\Validatable isAlphaNum($m = 0, $n = 0)
+ * @method \Respect\Validation\Validatable isUid()
+ * @method \Respect\Validation\Validatable not($r)
+ * @method \Respect\Validation\Validatable is($e)
+ * @method \Respect\Validation\Validatable isIn($a)
+ * @method \Respect\Validation\Validatable isNull()
+ * @method \Respect\Validation\Validatable isNullOrEmpty()
+ * @method \Respect\Validation\Validatable isMail($l = 128)
+ * @method \Respect\Validation\Validatable isUrl()
+ * @method \Respect\Validation\Validatable isUriData()
+ * @method \Respect\Validation\Validatable isSlug($m = 0, $n = 0)
+ * @method \Respect\Validation\Validatable isPassword(int $k, int $l, int $u, int $n, int $s, string $c = null)
  * @package Respect\Validato\Wrapper\Test
  */
 class ValidatorBaseStub
@@ -92,7 +93,6 @@ class RespectValidationWrapperTraitTest extends TestCase
 
     /**
      * test de IsText
-     * @throws \Respect\Validation\Exceptions\ComponentException
      */
     public function testIsText(): void
     {
@@ -110,7 +110,6 @@ class RespectValidationWrapperTraitTest extends TestCase
 
     /**
      * test de tIsAlphaNum
-     * @throws \Respect\Validation\Exceptions\ComponentException
      */
     public function testIsAlphaNum(): void
     {
@@ -223,7 +222,6 @@ class RespectValidationWrapperTraitTest extends TestCase
 
     /**
      * test de IsNullableOrEmpty
-     * @throws \Respect\Validation\Exceptions\ComponentException
      */
     public function testIsNullableOrEmpty(): void
     {
@@ -253,7 +251,6 @@ class RespectValidationWrapperTraitTest extends TestCase
 
     /**
      * test de IsAssocArray
-     * @throws \Respect\Validation\Exceptions\ComponentException
      */
     public function testIsAssocArray(): void
     {
@@ -277,7 +274,6 @@ class RespectValidationWrapperTraitTest extends TestCase
 
     /**
      * test de IsAssocArray
-     * @throws \Respect\Validation\Exceptions\ComponentException
      */
     public function testIsAssocArrayWithoutKey(): void
     {
@@ -296,7 +292,6 @@ class RespectValidationWrapperTraitTest extends TestCase
 
     /**
      * test de IsObject
-     * @throws \Respect\Validation\Exceptions\ComponentException
      */
     public function testIsObject(): void
     {
@@ -325,7 +320,6 @@ class RespectValidationWrapperTraitTest extends TestCase
 
     /**
      * test de IsObject
-     * @throws \Respect\Validation\Exceptions\ComponentException
      */
     public function testIsObjectWithout(): void
     {
@@ -344,7 +338,6 @@ class RespectValidationWrapperTraitTest extends TestCase
 
     /**
      * test de IsAllOf
-     * @throws \Respect\Validation\Exceptions\ComponentException
      */
     public function testIsAllOf(): void
     {
@@ -439,7 +432,6 @@ class RespectValidationWrapperTraitTest extends TestCase
 
     /**
      * test de isMail
-     * @throws \Respect\Validation\Exceptions\ComponentException
      */
     public function testIsMail(): void
     {
@@ -493,5 +485,54 @@ class RespectValidationWrapperTraitTest extends TestCase
         self::assertFalse($v->validate('az09'), "trop court");
         self::assertTrue($v->validate('az09az09'), "bonne longueur");
         self::assertFalse($v->validate('az09az09az09'), "trop long");
+    }
+
+    public function testPassword(): void
+    {
+        // test longueur de 4 caractères
+        $v = (new ValidatorBaseStub)->isPassword(4, 0, 0, 0, 0);
+        self::assertFalse($v->validate('aze'));
+        self::assertTrue($v->validate('AzertY'));
+        // test 2 minuscules
+        $v = (new ValidatorBaseStub)->isPassword(0, 2, 0, 0, 0);
+        self::assertFalse($v->validate('AAa'));
+        self::assertTrue($v->validate('Aaa'));
+        // test 2 majuscules
+        $v = (new ValidatorBaseStub)->isPassword(0, 0, 2, 0, 0);
+        self::assertFalse($v->validate('aaA'));
+        self::assertTrue($v->validate('aAA'));
+        // test 2 chiffres
+        $v = (new ValidatorBaseStub)->isPassword(0, 0, 0, 2, 0);
+        self::assertFalse($v->validate('aaA1'));
+        self::assertTrue($v->validate('aAA12'));
+        // test 2 symboles
+        $v = (new ValidatorBaseStub)->isPassword(0, 0, 0, 0, 2);
+        self::assertFalse($v->validate('aaA1'));
+        self::assertTrue($v->validate('aA/A?12'));
+        // test avec des règles complètes
+        $v = (new ValidatorBaseStub)->isPassword(8, 2, 2, 2, 1);
+        self::assertFalse($v->validate('mot de passe'));
+        self::assertFalse($v->validate('motdepasse'));
+        self::assertFalse($v->validate('MotDePasse'));
+        self::assertFalse($v->validate('M0t2Passe'));
+        self::assertTrue($v->validate('M0t2P@sse'));
+        // test de récuperation des erreur
+        try {
+            $v->assert('motdepasse');
+        } catch (\Exception $e) {
+            $message = "- Toutes les règles doivent passer pour \"motdepasse\"" . PHP_EOL
+                . "  - Le mot de passe doit contenir au moins 2 majuscules" . PHP_EOL
+                . "  - Le mot de passe doit contenir au moins 2 chiffres" . PHP_EOL
+                . "  - Le mot de passe doit contenir au moins 1 symboles";
+            self::assertEquals($message, $e->getFullMessage());
+        }
+        // test sans symbol custom
+        $v = (new ValidatorBaseStub)->isPassword(8, 0, 0, 0, 0);
+        self::assertTrue($v->validate('mot de passe'));
+        self::assertTrue($v->validate('mot_de_passe'));
+        // test avec symbol custom
+        $v = (new ValidatorBaseStub)->isPassword(8, 0, 0, 0, 0, '.-_');
+        self::assertFalse($v->validate('mot de passe'));
+        self::assertTrue($v->validate('mot_de_passe'));
     }
 }

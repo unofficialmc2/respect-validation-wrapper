@@ -15,6 +15,7 @@ use Respect\Validation\Rules\AllOf;
 use Respect\Validation\Rules\Alnum;
 use Respect\Validation\Rules\AnyOf;
 use Respect\Validation\Rules\BoolType;
+use Respect\Validation\Rules\Callback;
 use Respect\Validation\Rules\Date;
 use Respect\Validation\Rules\DateTime;
 use Respect\Validation\Rules\Digit;
@@ -351,15 +352,6 @@ trait RespectValidationWrapperTrait
      * @param array<\Respect\Validation\Validatable> $rules
      * @return \Respect\Validation\Validatable
      */
-    protected static function isAllOf(array $rules): Validatable
-    {
-        return new AllOf(...$rules);
-    }
-
-    /**
-     * @param array<\Respect\Validation\Validatable> $rules
-     * @return \Respect\Validation\Validatable
-     */
     protected static function isOneOf(array $rules): Validatable
     {
         return new OneOf(...$rules);
@@ -423,9 +415,110 @@ trait RespectValidationWrapperTrait
      * valide un text au format UriData
      * @return \Respect\Validation\Validatable
      */
-    protected function isUriData(): Validatable
+    protected static function isUriData(): Validatable
     {
         $reg = "/^data:([\w\-\.]+\/[\w\-\.+]+)(;charset=[\w\-\.]+)?(;\w+)?,.*$/";
         return new Rules\Regex($reg);
+    }
+
+    /**
+     * Valide un mot de passe
+     * @param int $length longueur minimum
+     * @param int $lower nombre de lettres minuscules
+     * @param int $upper nombre de lettres majuscules
+     * @param int $number nombre de chiffres
+     * @param int $symbol nombre de symboles
+     * @param string|null $customSymbols liste des symboles
+     * @return \Respect\Validation\Validatable
+     */
+    protected static function isPassword(
+        int     $length,
+        int     $lower,
+        int     $upper,
+        int     $number,
+        int     $symbol,
+        ?string $customSymbols = null
+    ): Validatable
+    {
+        try {
+            $rules = [
+                (new Length($length))
+                    ->setName('longueur minimum')
+                    ->setTemplate("Le mot de passe doit contenir $length caractères")
+            ];
+            $undesiredCharRule = (new Callback(static function ($input) use ($customSymbols): bool {
+                $customSymbols = $customSymbols !== null ? preg_quote($customSymbols, '/') : '\W_';
+                $find = preg_match_all('/([^a-zA-Z\d' . $customSymbols . '])/', $input);
+                if ($find === false) {
+                    return false;
+                }
+                return $find === 0;
+            }))
+                ->setName('caractere non autorisé')
+                ->setTemplate("Le mot de passe contient des caractères non autorisé");
+            $rules[] = $undesiredCharRule;
+            if ($lower > 0) {
+                $lowerRule = (new Callback(static function ($input) use ($lower): bool {
+                    $find = preg_match_all('/([a-z])/', $input);
+                    if ($find === false) {
+                        return false;
+                    }
+                    return $find >= $lower;
+                }))
+                    ->setName('minuscules nécessaires')
+                    ->setTemplate("Le mot de passe doit contenir au moins $lower minuscules");
+                $rules[] = $lowerRule;
+            }
+            if ($upper > 0) {
+                $upperRule = (new Callback(static function ($input) use ($upper): bool {
+                    $find = preg_match_all('/([A-Z])/', $input);
+                    if ($find === false) {
+                        return false;
+                    }
+                    return $find >= $upper;
+                }))
+                    ->setName('majuscules nécessaires')
+                    ->setTemplate("Le mot de passe doit contenir au moins $upper majuscules");
+                $rules[] = $upperRule;
+            }
+            if ($number > 0) {
+                $numberRule = (new Callback(static function ($input) use ($number): bool {
+                    $find = preg_match_all('/(\d)/', $input);
+                    if ($find === false) {
+                        return false;
+                    }
+                    return $find >= $number;
+                }))
+                    ->setName('chiffres nécessaires')
+                    ->setTemplate("Le mot de passe doit contenir au moins $number chiffres");
+                $rules[] = $numberRule;
+            }
+            if ($symbol > 0) {
+                $symbolRule = (new Callback(static function ($input) use ($symbol, $customSymbols): bool {
+                    $customSymbols = $customSymbols !== null ? preg_quote($customSymbols, '/') : '\W_';
+                    $find = preg_match_all('/([' . $customSymbols . '])/', $input);
+                    if ($find === false) {
+                        return false;
+                    }
+                    return $find >= $symbol;
+                }))
+                    ->setName('symboles nécessaires')
+                    ->setTemplate("Le mot de passe doit contenir au moins $symbol symboles");
+                $rules[] = $symbolRule;
+            }
+            return (self::isAllOf($rules))
+                ->setTemplate('Toutes les règles doivent passer pour {{name}}');
+        } catch (ComponentException $e) {
+            throw new RuntimeException("impossible d'initialiser " . static::class . " un problème dans " . __METHOD__);
+        }
+    }
+
+    /**
+     * @param array<\Respect\Validation\Validatable> $rules
+     * @return \Respect\Validation\Validatable
+     */
+    protected static function isAllOf(array $rules): Validatable
+    {
+        return new AllOf(...$rules);
     }
 }

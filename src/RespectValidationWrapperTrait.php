@@ -237,7 +237,7 @@ trait RespectValidationWrapperTrait
      */
     protected static function isNullable(Validatable $rules): Validatable
     {
-        return new OneOf(
+        return new AnyOf(
             new NullType(),
             $rules
         );

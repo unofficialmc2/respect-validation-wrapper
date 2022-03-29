@@ -125,14 +125,20 @@ trait RespectValidationWrapperTrait
      * @param int $max
      * @return \Respect\Validation\Validatable
      */
-    protected static function isSlug(int $max = 128): Validatable
+    protected static function isSlug(int $minMax = 128, ?int $max = null): Validatable
     {
         try {
             $slug = new Regex('/^[a-z0-9]+(?:[._-][a-z0-9]+)*$/i');
+            if ($max === null) {
+                return new AllOf(
+                    $slug,
+                    new Length(null, $minMax)
+                );
+            }
             return new AllOf(
                 $slug,
                 new Rules\NotEmpty(),
-                new Length(null, $max)
+                new Length(max(1, $minMax), $max)
             );
         } catch (ComponentException $e) {
             throw new RuntimeException("impossible d'initialiser " . static::class . " un problème dans " . __METHOD__);

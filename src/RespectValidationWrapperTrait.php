@@ -429,8 +429,7 @@ trait RespectValidationWrapperTrait
         int     $number,
         int     $symbol,
         ?string $customSymbols = null
-    ): Validatable
-    {
+    ): Validatable {
         try {
             $rules = [
                 (new Length($length))

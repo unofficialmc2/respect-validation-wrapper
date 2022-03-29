@@ -132,7 +132,7 @@ trait RespectValidationWrapperTrait
             return new AllOf(
                 $slug,
                 new Rules\NotEmpty(),
-                new Length($max)
+                new Length(null, $max)
             );
         } catch (ComponentException $e) {
             throw new RuntimeException("impossible d'initialiser " . static::class . " un problème dans " . __METHOD__);

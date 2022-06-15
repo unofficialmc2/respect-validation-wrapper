@@ -3,40 +3,42 @@ declare(strict_types=1);
 
 namespace Respect\Validaton\Wrapper\Test;
 
+use Respect\Validation\Validatable;
 use Respect\Validaton\Wrapper\RespectValidationWrapperTrait;
 use RuntimeException;
 
 /**
  * Class ValidatorBaseStub
- * @method \Respect\Validation\Validatable isBool()
- * @method \Respect\Validation\Validatable isTrue()
- * @method \Respect\Validation\Validatable isFalse()
- * @method \Respect\Validation\Validatable isTelNum()
- * @method \Respect\Validation\Validatable isDate()
- * @method \Respect\Validation\Validatable isDateTime()
- * @method \Respect\Validation\Validatable isTime()
- * @method \Respect\Validation\Validatable isNullable($r)
- * @method \Respect\Validation\Validatable isNullableOrEmpty($r)
- * @method \Respect\Validation\Validatable isArray($r = null)
- * @method \Respect\Validation\Validatable isAssocArray($r)
- * @method \Respect\Validation\Validatable isObject($r, $c = null)
- * @method \Respect\Validation\Validatable isAllOf($r)
- * @method \Respect\Validation\Validatable isOneOf($r)
- * @method \Respect\Validation\Validatable isId()
- * @method \Respect\Validation\Validatable isNumeric()
- * @method \Respect\Validation\Validatable isText($m = 0, $n = 0)
- * @method \Respect\Validation\Validatable isAlphaNum($m = 0, $n = 0)
- * @method \Respect\Validation\Validatable isUid()
- * @method \Respect\Validation\Validatable not($r)
- * @method \Respect\Validation\Validatable is($e)
- * @method \Respect\Validation\Validatable isIn($a)
- * @method \Respect\Validation\Validatable isNull()
- * @method \Respect\Validation\Validatable isNullOrEmpty()
- * @method \Respect\Validation\Validatable isMail($l = 128)
- * @method \Respect\Validation\Validatable isUrl()
- * @method \Respect\Validation\Validatable isUriData()
- * @method \Respect\Validation\Validatable isSlug($m = 0, $n = 0)
- * @method \Respect\Validation\Validatable isPassword(int $k, int $l, int $u, int $n, int $s, string $c = null)
+ * @method Validatable isBool()
+ * @method Validatable isTrue()
+ * @method Validatable isFalse()
+ * @method Validatable isTelNum()
+ * @method Validatable isDate()
+ * @method Validatable isDateTime()
+ * @method Validatable isTime()
+ * @method Validatable isNullable(Validatable $r)
+ * @method Validatable isNullableOrEmpty(Validatable $r)
+ * @method Validatable isArray(Validatable $r = null)
+ * @method Validatable isAssocArray(array $r)
+ * @method Validatable isObject(array $r, string $c = null)
+ * @method Validatable isAllOf(array $r)
+ * @method Validatable isOneOf(array $r)
+ * @method Validatable isAnyOf(array $r)
+ * @method Validatable isId()
+ * @method Validatable isNumeric()
+ * @method Validatable isText(int $m = 0, int $n = 0)
+ * @method Validatable isAlphaNum(int $m = 0, int $n = 0)
+ * @method Validatable isUid()
+ * @method Validatable not(Validatable $r)
+ * @method Validatable is($e)
+ * @method Validatable isIn(array $a)
+ * @method Validatable isNull()
+ * @method Validatable isNullOrEmpty()
+ * @method Validatable isMail(int $l = 128)
+ * @method Validatable isUrl()
+ * @method Validatable isUriData()
+ * @method Validatable isSlug(int $m = 0, int $n = 0)
+ * @method Validatable isPassword(int $k, int $l, int $u, int $n, int $s, string $c = null)
  * @package Respect\Validato\Wrapper\Test
  */
 class ValidatorBaseStub
@@ -534,5 +536,20 @@ class RespectValidationWrapperTraitTest extends TestCase
         $v = (new ValidatorBaseStub)->isPassword(8, 0, 0, 0, 0, '.-_');
         self::assertFalse($v->validate('mot de passe'));
         self::assertTrue($v->validate('mot_de_passe'));
+    }
+
+    /**
+     * Test de isAnyOf Rule
+     */
+    public function testIsAnyOf(): void
+    {
+        $v = (new ValidatorBaseStub)->isAnyOf([
+            (new ValidatorBaseStub)->isId(),
+            (new ValidatorBaseStub)->isText(),
+        ]);
+        self::assertTrue($v->validate(1));
+        self::assertTrue($v->validate('1'));
+        self::assertTrue($v->validate('a'));
+        self::assertFalse($v->validate((object)[]));
     }
 }

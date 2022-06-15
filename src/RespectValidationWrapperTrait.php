@@ -355,6 +355,15 @@ trait RespectValidationWrapperTrait
     }
 
     /**
+     * @param array<\Respect\Validation\Validatable> $rules
+     * @return \Respect\Validation\Validatable
+     */
+    protected static function isAnyOf(array $rules): Validatable
+    {
+        return new AnyOf(...$rules);
+    }
+
+    /**
      * inverse la validation
      * @param \Respect\Validation\Validatable $rule
      * @return \Respect\Validation\Validatable

@@ -23,6 +23,7 @@ use RuntimeException;
  * @method Validatable isObject(array $r, string $c = null)
  * @method Validatable isAllOf(array $r)
  * @method Validatable isOneOf(array $r)
+ * @method Validatable isAnyOf(array $r)
  * @method Validatable isId()
  * @method Validatable isNumeric()
  * @method Validatable isText(int $m = 0, int $n = 0)
@@ -535,5 +536,20 @@ class RespectValidationWrapperTraitTest extends TestCase
         $v = (new ValidatorBaseStub)->isPassword(8, 0, 0, 0, 0, '.-_');
         self::assertFalse($v->validate('mot de passe'));
         self::assertTrue($v->validate('mot_de_passe'));
+    }
+
+    /**
+     * Test de isAnyOf Rule
+     */
+    public function testIsAnyOf(): void
+    {
+        $v = (new ValidatorBaseStub)->isAnyOf([
+            (new ValidatorBaseStub)->isId(),
+            (new ValidatorBaseStub)->isText(),
+        ]);
+        self::assertTrue($v->validate(1));
+        self::assertTrue($v->validate('1'));
+        self::assertTrue($v->validate('a'));
+        self::assertFalse($v->validate((object)[]));
     }
 }

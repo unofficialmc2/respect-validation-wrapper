@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Respect\Validaton\Wrapper\Test;
 
+use Respect\Validation\Exceptions\NestedValidationException;
 use Respect\Validation\Validatable;
 use Respect\Validaton\Wrapper\RespectValidationWrapperTrait;
 use RuntimeException;
@@ -189,12 +190,13 @@ class RespectValidationWrapperTraitTest extends TestCase
     }
 
     /**
-     * test de IsDateTime
+     * test de IsDateTimeISO
+     * Prise en charge des date time avec la norme ISO
      */
     public function testIsDateTimeIso(): void
     {
         $v = (new ValidatorBaseStub)->isDateTimeIso();
-        self::assertTrue($v->validate('2020-01-01T12:36:26+02:00'), "ISO");
+        self::assertTrue($v->validate('2003-02-01T12:34:56+02:00'), "ISO");
         self::assertTrue($v->validate('2020-01-01T12:36:26'), "ISO UTC");
         self::assertFalse($v->validate('2020-01-01 12:36:26'), "ISO simplifié local");
         self::assertFalse($v->validate('2020-01-01 12:36'), "ISO simplifié local sans minutes");
@@ -202,6 +204,7 @@ class RespectValidationWrapperTraitTest extends TestCase
         self::assertFalse($v->validate('1er janvier 2020 12:36:26'));
         self::assertFalse($v->validate('2020-01-01 6h3m10s'));
     }
+
     /**
      * test de IsDateTime
      */
@@ -468,6 +471,7 @@ class RespectValidationWrapperTraitTest extends TestCase
     public function testIsUrl(): void
     {
         $v = (new ValidatorBaseStub)->isUrl();
+        /** @noinspection HttpUrlsUsage */
         self::assertTrue($v->validate('http://www.exemple.net'));
         self::assertFalse($v->validate('http:exemple.net'));
     }
@@ -477,7 +481,13 @@ class RespectValidationWrapperTraitTest extends TestCase
      */
     public function testUriData(): void
     {
-        $data = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAADCAMAAACd425HAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAXVBMVEVChfRBhfV3cLjvPzD2mhL4vQhUiOg5lqlqiU34OzJChfQ9h/qOZ53tQjH2khXtuhdjjsw7jtCjaUjvQDRChfQ/hvefYYvsQDP3mRLyuxFKh+s/ieegakzuQTT///84b11YAAAAHnRSTlNnUigmHiQgREknYFF3a3ZtcoaUdyQzHjAmLmByLy6csil2AAAAAWJLR0QecgogKwAAAAd0SU1FB+UJFA4DLqVT8S4AAAApSURBVAjXY2BgZGJmYWVj5+Bk4OLm4eXjFxAUEmYQERUTl5CUkpaRBQASmwG0/WmHKAAAACt0RVh0Q29tbWVudABSZXNpemVkIG9uIGh0dHBzOi8vZXpnaWYuY29tL3Jlc2l6ZUJpjS0AAAAldEVYdGRhdGU6Y3JlYXRlADIwMjEtMDktMjBUMTQ6MDM6MzgrMDA6MDAaKnZPAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDIxLTA5LTIwVDE0OjAzOjM4KzAwOjAwa3fO8wAAABJ0RVh0U29mdHdhcmUAZXpnaWYuY29toMOzWAAAAABJRU5ErkJggg==";
+        $data = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAADCAMAAACd425HAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6"
+            . "JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAXVBMVEVChfRBhfV3cLjvPzD2mhL4vQhUiOg5lqlqiU34OzJChfQ9h/qO"
+            . "Z53tQjH2khXtuhdjjsw7jtCjaUjvQDRChfQ/hvefYYvsQDP3mRLyuxFKh+s/ieegakzuQTT///84b11YAAAAHnRSTlNnUigmHiQgREkn"
+            . "YFF3a3ZtcoaUdyQzHjAmLmByLy6csil2AAAAAWJLR0QecgogKwAAAAd0SU1FB+UJFA4DLqVT8S4AAAApSURBVAjXY2BgZGJmYWVj5+Bk"
+            . "4OLm4eXjFxAUEmYQERUTl5CUkpaRBQASmwG0/WmHKAAAACt0RVh0Q29tbWVudABSZXNpemVkIG9uIGh0dHBzOi8vZXpnaWYuY29tL3Jl"
+            . "c2l6ZUJpjS0AAAAldEVYdGRhdGU6Y3JlYXRlADIwMjEtMDktMjBUMTQ6MDM6MzgrMDA6MDAaKnZPAAAAJXRFWHRkYXRlOm1vZGlmeQAy"
+            . "MDIxLTA5LTIwVDE0OjAzOjM4KzAwOjAwa3fO8wAAABJ0RVh0U29mdHdhcmUAZXpnaWYuY29toMOzWAAAAABJRU5ErkJggg==";
         $v = (new ValidatorBaseStub)->isUriData();
         self::assertTrue($v->validate($data));
         self::assertFalse($v->validate('http:exemple.net'));
@@ -539,7 +549,7 @@ class RespectValidationWrapperTraitTest extends TestCase
         // test de récuperation des erreur
         try {
             $v->assert('motdepasse');
-        } catch (\Exception $e) {
+        } catch (NestedValidationException $e) {
             $message = "- Toutes les règles doivent passer pour \"motdepasse\"" . PHP_EOL
                 . "  - Le mot de passe doit contenir au moins 2 majuscules" . PHP_EOL
                 . "  - Le mot de passe doit contenir au moins 2 chiffres" . PHP_EOL

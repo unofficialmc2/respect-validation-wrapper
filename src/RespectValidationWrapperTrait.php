@@ -121,8 +121,8 @@ trait RespectValidationWrapperTrait
 
     /**
      * valide un slug
-     * @param int $maxMin
-     * @param int $max
+     * @param int $minMax
+     * @param int|null $max
      * @return \Respect\Validation\Validatable
      */
     protected static function isSlug(int $minMax = 128, ?int $max = null): Validatable
@@ -196,10 +196,10 @@ trait RespectValidationWrapperTrait
      */
     protected static function isDateTimeIso(): Validatable
     {
-        return self::isAnyOf([
+        return new AnyOf(
             new DateTime(DATE_ATOM),
             new DateTime('Y-m-d\TH:i:s')
-        ]);
+        );
     }
 
     /**
@@ -207,10 +207,10 @@ trait RespectValidationWrapperTrait
      */
     protected static function isDateTime(): Validatable
     {
-        return self::isAnyOf([
+        return new AnyOf(
             new DateTime('Y-m-d H:i:s'),
             new DateTime('Y-m-d H:i')
-        ]);
+        );
     }
 
     /**
@@ -218,10 +218,10 @@ trait RespectValidationWrapperTrait
      */
     protected static function isTime(): Validatable
     {
-        return self::isAnyOf([
+        return new AnyOf(
             new Time('H:i:s'),
             new Time('H:i')
-        ]);
+        );
     }
 
     /**
@@ -528,7 +528,7 @@ trait RespectValidationWrapperTrait
                     ->setTemplate("Le mot de passe doit contenir au moins $symbol symboles");
                 $rules[] = $symbolRule;
             }
-            return (self::isAllOf($rules))
+            return (new AllOf(...$rules))
                 ->setTemplate('Toutes les règles doivent passer pour {{name}}');
         } catch (ComponentException $e) {
             throw new RuntimeException("impossible d'initialiser " . static::class . " un problème dans " . __METHOD__);

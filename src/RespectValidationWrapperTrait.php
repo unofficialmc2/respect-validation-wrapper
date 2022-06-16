@@ -194,9 +194,23 @@ trait RespectValidationWrapperTrait
     /**
      * @return \Respect\Validation\Validatable
      */
+    protected static function isDateTimeIso(): Validatable
+    {
+        return self::isAnyOf([
+            new DateTime(DATE_ATOM),
+            new DateTime('Y-m-d\TH:i:s')
+        ]);
+    }
+
+    /**
+     * @return \Respect\Validation\Validatable
+     */
     protected static function isDateTime(): Validatable
     {
-        return new DateTime('Y-m-d H:i:s');
+        return self::isAnyOf([
+            new DateTime('Y-m-d H:i:s'),
+            new DateTime('Y-m-d H:i')
+        ]);
     }
 
     /**
@@ -204,7 +218,10 @@ trait RespectValidationWrapperTrait
      */
     protected static function isTime(): Validatable
     {
-        return new Time('H:i:s');
+        return self::isAnyOf([
+            new Time('H:i:s'),
+            new Time('H:i')
+        ]);
     }
 
     /**

@@ -66,12 +66,9 @@ trait RespectValidationWrapperTrait
     {
         try {
             if ($max <= 0) {
-                return new OneOf(
-                    new Equals(''),
-                    new AllOf(
-                        new Rules\StringType(),
-                        new Length(null, $maxMin)
-                    )
+                return new AllOf(
+                    new Rules\StringType(),
+                    new Length(null, $maxMin)
                 );
             }
             return new AllOf(

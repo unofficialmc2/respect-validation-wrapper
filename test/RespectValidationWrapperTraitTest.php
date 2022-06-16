@@ -15,6 +15,7 @@ use RuntimeException;
  * @method Validatable isTelNum()
  * @method Validatable isDate()
  * @method Validatable isDateTime()
+ * @method Validatable isDateTimeIso()
  * @method Validatable isTime()
  * @method Validatable isNullable(Validatable $r)
  * @method Validatable isNullableOrEmpty(Validatable $r)
@@ -190,9 +191,25 @@ class RespectValidationWrapperTraitTest extends TestCase
     /**
      * test de IsDateTime
      */
+    public function testIsDateTimeIso(): void
+    {
+        $v = (new ValidatorBaseStub)->isDateTimeIso();
+        self::assertTrue($v->validate('2020-01-01T12:36:26+02:00'), "ISO");
+        self::assertTrue($v->validate('2020-01-01T12:36:26'), "ISO UTC");
+        self::assertFalse($v->validate('2020-01-01 12:36:26'), "ISO simplifié local");
+        self::assertFalse($v->validate('2020-01-01 12:36'), "ISO simplifié local sans minutes");
+        self::assertFalse($v->validate('1er janvier 2020 6h3m10s'));
+        self::assertFalse($v->validate('1er janvier 2020 12:36:26'));
+        self::assertFalse($v->validate('2020-01-01 6h3m10s'));
+    }
+    /**
+     * test de IsDateTime
+     */
     public function testIsDateTime(): void
     {
         $v = (new ValidatorBaseStub)->isDateTime();
+        self::assertFalse($v->validate('2020-01-01T12:36:26+02:00'), "ISO");
+        self::assertFalse($v->validate('2020-01-01T12:36:26'), "ISO UTC");
         self::assertTrue($v->validate('2020-01-01 12:36:26'), "ISO simplifié local");
         self::assertTrue($v->validate('2020-01-01 12:36'), "ISO simplifié local sans minutes");
         self::assertFalse($v->validate('1er janvier 2020 6h3m10s'));

@@ -193,7 +193,8 @@ class RespectValidationWrapperTraitTest extends TestCase
     public function testIsDateTime(): void
     {
         $v = (new ValidatorBaseStub)->isDateTime();
-        self::assertTrue($v->validate('2020-01-01 12:36:26'));
+        self::assertTrue($v->validate('2020-01-01 12:36:26'), "ISO simplifié local");
+        self::assertTrue($v->validate('2020-01-01 12:36'), "ISO simplifié local sans minutes");
         self::assertFalse($v->validate('1er janvier 2020 6h3m10s'));
         self::assertFalse($v->validate('1er janvier 2020 12:36:26'));
         self::assertFalse($v->validate('2020-01-01 6h3m10s'));
@@ -205,8 +206,8 @@ class RespectValidationWrapperTraitTest extends TestCase
     public function testIsTime(): void
     {
         $v = (new ValidatorBaseStub)->isTime();
-        self::assertTrue($v->validate('15:52:30'));
-        self::assertFalse($v->validate('15:52'));
+        self::assertTrue($v->validate('15:52:30'), "heure minute seconde");
+        self::assertTrue($v->validate('15:52'), "heure minute");
         self::assertFalse($v->validate('15h5210s'));
     }
 

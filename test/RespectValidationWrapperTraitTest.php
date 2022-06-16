@@ -103,10 +103,13 @@ class RespectValidationWrapperTraitTest extends TestCase
         $v = (new ValidatorBaseStub)->isText();
         self::assertTrue($v->validate('aaaaaaaaaaaaaaaaa'));
         self::assertFalse($v->validate(100000004));
+        self::assertFalse($v->validate(str_repeat("a", 129)), 'no config 129 caracteres');
         $v = (new ValidatorBaseStub)->isText(5);
+        self::assertTrue($v->validate(''));
         self::assertTrue($v->validate('aaaa'));
         self::assertFalse($v->validate('aaaaaaaaaaaaaaaaa'));
         $v = (new ValidatorBaseStub)->isText(2, 5);
+        self::assertFalse($v->validate(''));
         self::assertFalse($v->validate('a'));
         self::assertTrue($v->validate('aaaa'));
         self::assertFalse($v->validate('aaaaaaa'));

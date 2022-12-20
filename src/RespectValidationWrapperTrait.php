@@ -540,4 +540,28 @@ trait RespectValidationWrapperTrait
     {
         return new AllOf(...$rules);
     }
+
+    /**
+     * Valide une chaine avec une regex
+     * @param string $regex
+     * @param int $maxMin
+     * @param int $max
+     * @return Validatable
+     */
+    protected static function isMatchingRegex(string $regex, int $maxMin = 128, int $max = -1): Validatable
+    {
+        return new AllOf(
+            self::isText($maxMin, $max),
+            new Regex($regex)
+        );
+    }
+
+    /**
+     * Valide un numéro de téléphone
+     * @return void
+     */
+    protected static function isPhoneNumber():Validatable
+    {
+        return self::isMatchingRegex('/^((?:\+33|0033|0)[1-9](?:[ -.\/]?\d{2,3})+)$/', 20);
+    }
 }

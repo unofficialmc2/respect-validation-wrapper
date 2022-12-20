@@ -41,6 +41,8 @@ use RuntimeException;
  * @method Validatable isUriData()
  * @method Validatable isSlug(int $m = 0, int $n = 0)
  * @method Validatable isPassword(int $k, int $l, int $u, int $n, int $s, string $c = null)
+ * @method Validatable isMatchingRegex(string $r, int $m = 0, int $n = 0)
+ * @method Validatable isPhoneNumber()
  * @package Respect\Validato\Wrapper\Test
  */
 class ValidatorBaseStub
@@ -583,4 +585,33 @@ class RespectValidationWrapperTraitTest extends TestCase
         self::assertTrue($v->validate('a'));
         self::assertFalse($v->validate((object)[]));
     }
+
+
+    /**
+     * Test de isMatchingRegex Rule
+     */
+    public function testIsMatchingRegex(): void
+    {
+        $v = (new ValidatorBaseStub)->isMatchingRegex('/^[abc]+$/',2);
+        self::assertTrue($v->validate('a'));
+        self::assertTrue($v->validate('ac'));
+        self::assertFalse($v->validate('abc'));
+        self::assertFalse($v->validate((object)[]));
+        self::assertFalse($v->validate(1));
+    }
+
+
+    /**
+     * Test de isPhoneNumber Rule
+     */
+    public function testIsPhoneNumber(): void
+    {
+        $v = (new ValidatorBaseStub)->isPhoneNumber();
+        self::assertTrue($v->validate('0612345678'));
+        self::assertFalse($v->validate('1612345678'));
+        self::assertTrue($v->validate('+333.51.51.51.51'));
+        self::assertTrue($v->validate('0033351 515 151'));
+    }
+
+
 }

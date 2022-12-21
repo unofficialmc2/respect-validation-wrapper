@@ -13,7 +13,6 @@ use RuntimeException;
  * @method Validatable isBool()
  * @method Validatable isTrue()
  * @method Validatable isFalse()
- * @method Validatable isTelNum()
  * @method Validatable isDate()
  * @method Validatable isDateTime()
  * @method Validatable isDateTimeIso()
@@ -168,20 +167,6 @@ class RespectValidationWrapperTraitTest extends TestCase
         $v = (new ValidatorBaseStub)->isFalse();
         self::assertTrue($v->validate(false));
         self::assertFalse($v->validate(true));
-    }
-
-    /**
-     * test de IsTelNum
-     */
-    public function testIsTelNum(): void
-    {
-        $v = (new ValidatorBaseStub)->isTelNum();
-        self::assertTrue($v->validate('0612345678'));
-        self::assertTrue($v->validate('06 12 34 56 78'));
-        self::assertTrue($v->validate('06 12 345 678'));
-        self::assertTrue($v->validate('+336 12 345 678'));
-//        self::assertFalse($v->validate('ligne rouge'));
-//        self::assertFalse($v->validate('0612345xxx'));
     }
 
     /**
@@ -611,6 +596,13 @@ class RespectValidationWrapperTraitTest extends TestCase
         self::assertFalse($v->validate('1612345678'));
         self::assertTrue($v->validate('+333.51.51.51.51'));
         self::assertTrue($v->validate('0033351 515 151'));
+        // Test issus de deprecated isTelNum
+        self::assertTrue($v->validate('0612345678'));
+        self::assertTrue($v->validate('06 12 34 56 78'));
+        self::assertTrue($v->validate('06 12 345 678'));
+        self::assertTrue($v->validate('+336 12 345 678'));
+        self::assertFalse($v->validate('ligne rouge'));
+        self::assertFalse($v->validate('0612345xxx'));
     }
 
 

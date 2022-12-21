@@ -174,6 +174,7 @@ trait RespectValidationWrapperTrait
 
     /**
      * @return \Respect\Validation\Validatable
+     * @deprecated Remplacé dans la version 4.1 par isPhoneNumber
      */
     protected static function isTelNum(): Validatable
     {

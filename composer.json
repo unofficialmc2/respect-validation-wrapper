@@ -1,12 +1,12 @@
 {
-  "name": "fzed51/respect-validation-wrapper",
+  "name": "unofficialmc2/respect-validation-wrapper",
   "description": "wrapper pour la librairie de validation Respect/Validation",
   "minimum-stability": "stable",
   "license": "MIT",
   "authors": [
     {
       "name": "Fabien Sanchez",
-      "email": "fzed5+git@gmail.com"
+      "email": "fabien.sanchez@arche-mc2.fr"
     }
   ],
   "require": {

@@ -603,6 +603,8 @@ class RespectValidationWrapperTraitTest extends TestCase
         self::assertTrue($v->validate('+336 12 345 678'));
         self::assertFalse($v->validate('ligne rouge'));
         self::assertFalse($v->validate('0612345xxx'));
+        self::assertFalse($v->validate('+333.51.51.51'));
+        self::assertFalse($v->validate('06 12 34 56'));
     }
 
 

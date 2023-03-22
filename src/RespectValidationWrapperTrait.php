@@ -563,6 +563,6 @@ trait RespectValidationWrapperTrait
      */
     protected static function isPhoneNumber():Validatable
     {
-        return self::isMatchingRegex('/^((?:\+33|0033|0)[1-9](?:[ -.\/]?\d{2,3})+)$/', 20);
+        return self::isMatchingRegex('/^(\+33|0033|0)[1-9]([ -.\/]?\d){8}$/', 20);
     }
 }
